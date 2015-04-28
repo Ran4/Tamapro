@@ -1,0 +1,18 @@
+Android-delen:
+Kolla hur man gör http-requests med Android
+Ta emot http-requests 
+
+Server-delen:
+Ta emot requests och gör saker
+Skapa en Simulationsklass
+Fixa databasskrivning- och läsning av simulationsklass
+
+
+Allmänt:
+rita några bilder
+
+Features:
+Lek med dem
+Mata dem
+Köp items
+Träna dem
