@@ -1,6 +1,6 @@
+from item import *
 
-
-class TamaSimulation():
+class TamaSimulation(object):
     def __init__(self, uuidValue, name="Unnamed Tamapro"):
         self.uuid = uuidValue
         self.name = name
@@ -10,7 +10,16 @@ class TamaSimulation():
         self.hunger = 100
         self.hp = 100
         
-    def feed(self, item):
+        self.itemList = []
+        self.eatableItemsList = []
+        
+    def feed(self, itemStr):
+        if item._id not in sim.itemList:
+            return "Tama doesn't have the item %s" % item
+        
+        if item._id not in sim.eatableItemsList:
+            return "Tama doesn't want to eat item %s" % item 
+            
         self.mood = "happy"
         self.hunger = 0
         return "{} has the mood {}".format(self.name, self.mood)

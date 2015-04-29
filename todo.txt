@@ -1,18 +1,26 @@
 Android-delen:
-Kolla hur man gör http-requests med Android
-Ta emot http-requests 
+- Kolla hur man gör http-requests med Android
+- Ta emot http-requests 
 
 Server-delen:
-Ta emot requests och gör saker
-Skapa en Simulationsklass
-Fixa databasskrivning- och läsning av simulationsklass
-
+- Ta emot requests och gör saker
+- Skapa en Simulationsklass
+- Fixa databasskrivning- och läsning av simulationsklass
 
 Allmänt:
 rita några bilder
+- Glad tama
+- Ledsen tama
+- Hungrig tama
+
+
 
 Features:
-Lek med dem
-Mata dem
-Köp items
-Träna dem
+- Lek med dem
+- Mata dem
+- Köp items
+- Träna dem
+
+
+#
+/doaction/UUI/pet=34
