@@ -1,8 +1,10 @@
 import uuid
 
-from bottle import Bottle, route, run, template, request
+from bottle import Bottle, route, run, template, request, static_file
 
+import constants as con
 from tamasimulation import TamaSimulation
+import item
 
 class Server:
     def __init__(self, host, port):
@@ -13,51 +15,105 @@ class Server:
         
         self.simulations = {}
         uid = "debuguid"
-        self.simulations[uid] = TamaSimulation(uid, "DebugNamed Tama")
+        sim = TamaSimulation(uid, "DebugNamed Tama")
+        self.simulations[uid] = sim
+        
+        sim.inventory.append("child")
+        sim.inventory.append("banana")
 
     def start(self):
         self.app.run(host=self.host, port=self.port)
         
+    def getSimFromUID(self, uid):
+        """Returns a certain simulation, or None if no simulation was found
+        """
+        if uid in self.simulations:
+            return self.simulations[uid]
+        else:
+            return None
+        
     def setupRouting(self):
         r = self.app.route
         r('/', method="GET", callback=self.index)
-        r('/hello/<name>', callback=self.hello)
-        r('/createnewuser/<name>', callback=self.createNewUser)
+        r('/addtama/<name>', callback=self.createNewTama)
         r('/updatesimulation/<dt>', callback=self.updateSimulation)
-        r('/doaction/<uidstr>/<action>', callback=self.doAction)
-    
-    #Routing stuff
-
+        r('/<uid>', callback=self.showCommands)
+        r('/<uid>/', callback=self.showCommands)
+        r('/<uid>/<command>', callback=self.doAction)
+        r('/<uid>/<command>/', callback=self.doAction)
+        r('/<uid>/<command>/<arg>', callback=self.doAction)
+        
     def index(self):
         return 'Welcome'
-
-    def hello(self, name="Guest"):
-        return template('Hello {{name}}, how are you?', name=name)
         
-    def createNewUser(self, name):
+    def createNewTama(self, name):
         uid = str(uuid.uuid4())
+        uid = uid[:8]
         self.simulations[uid] = TamaSimulation(uid, name)
         
-        return "New user {} with id '{}' was created!".format(
+        return "New user {} with id </br>{}</br> was created!".format(
             name, uid)
         
-    def doAction(self, uidstr, action):
-        if uidstr not in self.simulations:
-            return "Couldn't find user with uid {}".format(
-                    uidstr)
-        
-        sim = self.simulations[uidstr]
-        
-        if "=" not in action and action not in self.actionList:
-            return "Couldn't perform action %s" % action
-        
-        if action.startswith("feed="):
-            itemToFeed = action.split("=", 1)
-            sim.feed(itemToFeed)
+    def doAction(self, uid, command, arg=None):
+        sim = self.getSimFromUID(uid)
+        if not sim:
+            return "Couldn't find tama with uid {}".format(uid)
+            
+            
+        s = "Called doAction with uid <br>{}".format(uid)
+        s += "</br>and command=" + command
+        if arg:
+            s += "</br>and argument=%s" % arg
         else:
-            return "Couldn't perform action %s" % action
-
-
+            s += "</br>but no argument"
+        s += "<br>----------</br>"
+        
+        #Make sure that the command exists and that it has args if needed
+        if command not in con.commandList:
+            return s + "Unknown command!"
+        elif command in con.requiresArguments and arg is None:
+            return s + "The %s command is missing an argument" % command
+            
+            
+        #Handle the commands!
+        if command == "give":
+            if arg not in item.items:
+                return s + "%s is not a valid item!" % arg
+            
+            return s + sim.addItem(arg)
+            
+        elif command == "inventory":
+            return "\n".join(sim.inventory)
+            
+        elif command == "getimage":
+            fileName = sim.getImageFileName()
+            print "Serving image with path %s" % fileName
+            return static_file(fileName, root='')
+            
+        elif command == "rename":
+            oldName = sim.name
+            sim.name = arg
+            return "%s switched name to %s" % (oldName, sim.name)
+        
+        elif command == "eat":
+            if arg not in item.items:
+                return s + "%s is not a valid item!" % arg
+                
+            response = sim.eat(arg)
+            return response
+            
+        elif command == "pet":
+            response = sim.pet(arg)
+            print "DEBUG: After petting, pet mood is now: %s" % sim.mood
+            return response
+        
+        #Command wasn't handled if we are here
+        return s + "Command wasn't handled."
+        
+    def showCommands(self, uid):
+        s = "Commands:</br>"
+        s += "</br>".join(con.commandList)
+        return s
         
     def updateSimulation(self, dt):
         try:
@@ -76,7 +132,7 @@ class Server:
     #Simulation stuff
 
 def main():
-    server = Server(host='localhost', port=8080)
+    server = Server(host='localhost', port=8089)
     server.start()
     
     """startSimulations()
