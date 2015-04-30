@@ -119,13 +119,12 @@ class Server:
         try:
             dt = int(dt)
         except ValueError as e:
-            #return "</br>".join(dir(e))
             return e.message
         except:
             return "error"
         
         for sim in self.simulations.values():
-            sim.spendTime(dt)
+            sim.updateSimulation(dt)
             
         return "Successfully ran updateSimulation"
         
