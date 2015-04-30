@@ -1,16 +1,19 @@
 import item
 
 class TamaSimulation(object):
-    def __init__(self, uuidValue, name="Unnamed Tamapro"):
-        self.uuid = uuidValue
+    def __init__(self, uid, name="Unnamed Tamapro"):
+        self.uid = uid
         self.name = name
         
         self.type = "basetama"
         
         self.mood = "unhappy"
+        
         self.MAX_HUNGER = 100
-        self.hunger = 100
-        self.hp = 100
+        self.hunger = self.MAX_HUNGER
+        
+        self.MAX_HP = 100
+        self.hp = self.MAX_HP
         
         self.inventory = []
         self.eatingPreference = []
@@ -25,6 +28,15 @@ class TamaSimulation(object):
             return directory + "happy.png"
         else:
             return directory + "regular.png"
+            
+    def getStatusReport(self):
+        return """<img src='{1}'></img>
+        mood: {0.mood}
+        hunger: {0.hunger}/{0.MAX_HUNGER}
+        hp: {0.hp}/{0.MAX_HP}
+        
+        type: {0.type}
+        """.replace("\n","</br>\n").format(self, "/"+self.getImageFileName())
         
     def addItem(self, itemStr):
         self.inventory.append(itemStr)
@@ -41,7 +53,10 @@ class TamaSimulation(object):
         
         self.mood = "happy"
         self.hunger = 0
-        return "EATED! {} now has the mood {}".format(self.name, self.mood)
+        s = "%s ate a %s!" % (self.name, itemStr)
+        s += " %s is now %s" % (self.name, self.mood)
+        
+        return s
         
     def pet(self, itemStr=None):
         if item.isPettable(itemStr):

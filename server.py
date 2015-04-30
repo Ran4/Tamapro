@@ -15,7 +15,7 @@ class Server:
         
         self.simulations = {}
         uid = "debuguid"
-        sim = TamaSimulation(uid, "DebugNamed Tama")
+        sim = TamaSimulation(uid, "DebugNameOfTama")
         self.simulations[uid] = sim
         
         sim.inventory.append("child")
@@ -34,7 +34,8 @@ class Server:
         
     def setupRouting(self):
         r = self.app.route
-        r('/', method="GET", callback=self.index)
+        #r('/', method="GET", callback=self.index)
+        r('/', callback=self.index)
         r('/addtama/<name>', callback=self.createNewTama)
         r('/updatesimulation/<dt>', callback=self.updateSimulation)
         r('/<uid>', callback=self.showCommands)
@@ -44,7 +45,18 @@ class Server:
         r('/<uid>/<command>/<arg>', callback=self.doAction)
         
     def index(self):
-        return 'Welcome'
+        s = ""
+        
+        sb = []
+        for sim in self.simulations.values():
+            sb.append("<p>{0.uid} - {0.name}</p>".format(sim))
+        s += "<b>Simulations running:</b>"
+        s += "\n".join(sb)
+        
+        s += "<b>List of items:</b>\n</br>"
+        s += "\n</br>".join(item.items.keys())
+        
+        return s
         
     def createNewTama(self, name):
         uid = str(uuid.uuid4())
@@ -94,6 +106,9 @@ class Server:
             oldName = sim.name
             sim.name = arg
             return "%s switched name to %s" % (oldName, sim.name)
+            
+        elif command == "status":
+            return sim.getStatusReport()
         
         elif command == "eat":
             if arg not in item.items:
