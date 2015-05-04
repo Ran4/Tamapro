@@ -80,6 +80,7 @@ class TamaSimulation(object):
                 self.mood = "good"
         
     def updateSimulation(self, dt):
-        self.hunger = min(self.hunger + dt, self.MAX_HUNGER)
+        dtMinutes = dt / 60.0
+        self.hunger = min(self.hunger + dtMinutes, self.MAX_HUNGER)
         
         self.updateMood()

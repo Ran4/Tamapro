@@ -3,7 +3,8 @@ import urllib2
 import time
 import sys
 
-"""Starts the server and calls it every dt seconds"""
+"""Starts the server and calls it every dt seconds
+The first argument (optional) is dt"""
 
 subprocess.Popen(["python", "server.py"])
 time.sleep(0.7)

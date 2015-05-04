@@ -14,6 +14,8 @@ class Server:
         self.setupRouting()
         
         self.simulations = {}
+        
+        #Debug stuff
         uid = "debuguid"
         sim = TamaSimulation(uid, "DebugNameOfTama")
         self.simulations[uid] = sim
@@ -21,6 +23,14 @@ class Server:
         sim.inventory.append("child")
         sim.inventory.append("banana")
 
+    def saveToDatabase(self):
+        """Saves all simulations to the database"""
+        pass
+    
+    def loadFromDatabase(self):
+        """Loads all simulations from the database"""
+        pass
+    
     def start(self):
         self.app.run(host=self.host, port=self.port)
         
@@ -44,7 +54,12 @@ class Server:
         r('/<uid>/<command>/', callback=self.doAction)
         r('/<uid>/<command>/<arg>', callback=self.doAction)
         
+    #############################################################
+    # ROUTING
+    #############################################################
+    
     def index(self):
+        """Returns a list of simulations running and a list of items"""
         s = ""
         
         sb = []
@@ -71,7 +86,6 @@ class Server:
         if not sim:
             return "Couldn't find tama with uid {}".format(uid)
             
-            
         s = "Called doAction with uid <br>{}".format(uid)
         s += "</br>and command=" + command
         if arg:
@@ -95,13 +109,14 @@ class Server:
             return s + sim.addItem(arg)
             
         elif command == "inventory":
+            #returns item
             return "\n".join(sim.inventory)
             
         elif command == "getimage":
             fileName = sim.getImageFileName()
             print "Serving image with path %s" % fileName
             return static_file(fileName, root='')
-            
+        
         elif command == "rename":
             oldName = sim.name
             sim.name = arg
