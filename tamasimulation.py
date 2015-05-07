@@ -17,8 +17,16 @@ class TamaSimulation(object):
         self.MAX_HP = 100
         self.hp = self.MAX_HP
         
+        self.poisoned = False
+        
         self.inventory = []
         self.eatingPreference = []
+        
+    def possessiveName(self):
+        if self.name.endswith("s","z"):
+            return self.name + "'"
+        else:
+            return self.name + "'s"
         
     def getImageFileName(self):
         """Returns the file path to the image of the tama depending on
@@ -51,12 +59,23 @@ class TamaSimulation(object):
         if not item.isEdible(itemStr):
             return "%s can't eat a %s" % (self.name, itemStr)
             
+        s = "%s ate a %s!" % (self.name, itemStr)
+            
+        if item.hasProperty(itemStr, item.POISONOUS):
+            if not self.poisoned: #only tell if we're not already poisoned
+                s += " It poisoned %s!" % self.name
+            
+            self.poisoned = True
+        
+        if self.poisoned and item.isHealing(itemStr):
+            self.poisoned = False
+            s += " It healed %s poison." % (self.possessiveName())
+            
         self.inventory.remove(itemStr)
         
-        self.mood = "happy"
-        self.hunger = 0
-        s = "%s ate a %s!" % (self.name, itemStr)
-        s += " %s is now %s" % (self.name, self.mood)
+        #self.mood = "happy"
+        #self.hunger = 0
+        #s += " %s is now %s" % (self.name, self.mood)
         
         return s
         
@@ -66,11 +85,19 @@ class TamaSimulation(object):
         else:
             self.mood = "unhappy"
         
-        if itemStr:
-            return "%s was petted with a %s! New mood: %s" % \
-                (self.name, itemStr, self.mood)
-        else:
+        if not itemStr:
             return "%s was petted! New mood: %s" % (self.name, self.mood)
+    
+        s = "%s was petted with a %s!" % (self.name, itemStr)
+            
+        if item.hasProperty(itemStr, item.POISONOUS):
+            if not self.poisoned: #only tell if we're not already poisoned
+                s += " It poisoned %s!" % self.name
+            self.poisoned = True
+        
+        s += " New mood: %s" % self.mood
+        
+        return s
             
     def updateMood(self):
         if self.hunger > 50:

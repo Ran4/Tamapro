@@ -1,0 +1,10 @@
+DROP TABLE IF EXISTS tamas
+DROP TABLE IF EXISTS items
+DROP TABLE IF EXISTS has
+DROP TABLE IF EXISTS knows
+CREATE TABLE tamas (uid TEXT PRIMARY KEY, type INTEGER, password TEXT, name TEXT, hunger INTEGER, mood INTEGER, sick INTEGER, money INTEGER)
+CREATE TABLE items (name TEXT PRIMARY KEY, price INTEGER, description TEXT)
+CREATE TABLE has (uid TEXT, name TEXT, amount INTEGER, FOREIGN KEY(uid) REFERENCES tamas(uid), FOREIGN KEY(name) REFERENCES items(name))
+CREATE TABLE knows (uid1 TEXT, uid2 TEXT, level INTEGER, FOREIGN KEY(uid1) REFERENCES tamas(uid), FOREIGN KEY(uid2) REFERENCES tamas(uid))
+
+INSERT INTO has VALUES ('eak43', 'aek21', 5)

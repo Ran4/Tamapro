@@ -23,7 +23,7 @@ items = {
 def hasProperty(itemName, prop):
     if itemName not in items:
         return False
-    return item[itemName] & prop
+    return items[itemName] & prop
 
 def isEdible(itemName):
     if itemName not in items: return False
@@ -36,4 +36,8 @@ def isTasty(itemName):
 def isPettable(itemName):
     if itemName not in items: return False
     return items[itemName] & PETTABLE
+    
+def isHealing(itemName):
+    if itemName not in items: return False
+    return items[itemName] & HEALING
     

@@ -14,11 +14,17 @@ rita några bilder
 - Hungrig tama
 
 Tabeller:
-    TamaListTabell:
-    uid, namn, hunger, mood, hp, ...
+    tamas:
+    !uid, type, password, name, hunger, mood, sick, money
 
-    Inventories:
-    uid itemid amount
+    items:
+    !name, price, description
+
+    has:
+    uid (>tamas), name (>items), amount
+
+    knows:
+    uid1 (>tamas), uid2 (>tamas), level 
 
 Features:
 - Lek med dem

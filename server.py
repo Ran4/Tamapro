@@ -14,6 +14,8 @@ class Server:
         self.app = Bottle()
         self.setupRouting()
         
+        self.dbname = "tamapro_database.db"
+        
         self.simulations = {}
         self.hej = self.saveToDatabase
         
@@ -32,7 +34,22 @@ class Server:
     
     def loadFromDatabase(self):
         """Loads all simulations from the database"""
-        pass
+        #conn = sqlite3.connect(self.dbname)
+        #c = conn.cursor()
+        
+        #First, populate list of simulations
+        """
+        for **kwargs in c.execute("SELECT * FROM tamas"):
+            print "kwargs from tamas:", kwargs
+            #self.simulations[uid] = TamaSimulation(**kwargs)
+            #sim = TamaSimulation(uid, "DebugNameOfTama", pw)
+        """
+        #Load up all items to all tamas
+        """
+        for uid, itemName, amount in c.execute("SELECT uid, name, amount FROM has"):
+            for _ in range(amount):
+                self.simulations[uid].inventory.add(itemName)
+       """ 
     
     def start(self):
         self.app.run(host=self.host, port=self.port)
@@ -89,6 +106,7 @@ class Server:
         
         return "New user {} with id </br>{}</br> was created!".format(
             name, uid)
+            
         
     def doAction(self, password, uid, command, arg=None):
         sim = self.getSimFromUID(uid)
