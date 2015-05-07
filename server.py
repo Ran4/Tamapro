@@ -1,4 +1,5 @@
 import uuid
+import sys
 
 from bottle import Bottle, route, run, template, request, static_file
 
@@ -14,10 +15,12 @@ class Server:
         self.setupRouting()
         
         self.simulations = {}
+        self.hej = self.saveToDatabase
         
         #Debug stuff
         uid = "debuguid"
-        sim = TamaSimulation(uid, "DebugNameOfTama")
+        pw = "debugpw"
+        sim = TamaSimulation(uid, "DebugNameOfTama", pw)
         self.simulations[uid] = sim
         
         sim.inventory.append("child")
@@ -46,17 +49,23 @@ class Server:
         r = self.app.route
         #r('/', method="GET", callback=self.index)
         r('/', callback=self.index)
-        r('/addtama/<name>', callback=self.createNewTama)
+        r('/addtama/<name>/<password>', callback=self.createNewTama)
         r('/updatesimulation/<dt>', callback=self.updateSimulation)
-        r('/<uid>', callback=self.showCommands)
-        r('/<uid>/', callback=self.showCommands)
-        r('/<uid>/<command>', callback=self.doAction)
-        r('/<uid>/<command>/', callback=self.doAction)
-        r('/<uid>/<command>/<arg>', callback=self.doAction)
+        r('/images/<imagepath:path>', callback=self.getImageRouting)
+        r('/<password>/<uid>', callback=self.showCommands)
+        r('/<password>/<uid>/', callback=self.showCommands)
+        r('/<password>/<uid>/<command>', callback=self.doAction)
+        r('/<password>/<uid>/<command>/', callback=self.doAction)
+        r('/<password>/<uid>/<command>/<arg>', callback=self.doAction)
         
     #############################################################
     # ROUTING
     #############################################################
+    
+    #def getImageRouting(self, imagepath):
+    def getImageRouting(self, imagepath):
+        fullPath = "images/" + imagepath
+        return static_file(imagepath, root='images')
     
     def index(self):
         """Returns a list of simulations running and a list of items"""
@@ -73,18 +82,21 @@ class Server:
         
         return s
         
-    def createNewTama(self, name):
+    def createNewTama(self, name, password):
         uid = str(uuid.uuid4())
         uid = uid[:8]
-        self.simulations[uid] = TamaSimulation(uid, name)
+        self.simulations[uid] = TamaSimulation(uid, name, password)
         
         return "New user {} with id </br>{}</br> was created!".format(
             name, uid)
         
-    def doAction(self, uid, command, arg=None):
+    def doAction(self, password, uid, command, arg=None):
         sim = self.getSimFromUID(uid)
         if not sim:
             return "Couldn't find tama with uid {}".format(uid)
+        
+        if sim.password and sim.password != password:
+            return "Wrong password for tama with uid {}".format(uid)
             
         s = "Called doAction with uid <br>{}".format(uid)
         s += "</br>and command=" + command
@@ -140,7 +152,7 @@ class Server:
         #Command wasn't handled if we are here
         return s + "Command wasn't handled."
         
-    def showCommands(self, uid):
+    def showCommands(self, password, uid):
         s = "Commands:</br>"
         s += "</br>".join(con.commandList)
         return s
@@ -161,11 +173,12 @@ class Server:
     #Simulation stuff
 
 def main():
-    server = Server(host='localhost', port=8089)
+    if len(sys.argv) > 1:
+        port = int(sys.argv[1])
+    else:
+        port = 8087
+    server = Server(host='0.0.0.0', port=port)
     server.start()
-    
-    """startSimulations()
-    run(host='localhost', port=8080)"""
    
 if __name__ == "__main__":
     main()

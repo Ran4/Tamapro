@@ -3,6 +3,9 @@ if &cp | set nocp | endif
 vnoremap   /\n\s*\n$zz
 nnoremap   /\n\s*\n$zz
 nnoremap ,r :vert resize 80
+nnoremap ,q :wincmd W
+nnoremap ,W :wincmd W
+nnoremap ,w :wincmd w
 nnoremap ,C ?class zz
 nnoremap ,c /class zz
 vnoremap ,D ?def zz
@@ -78,14 +81,14 @@ set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
-exe 'vert 1resize ' . ((&columns * 80 + 105) / 210)
-exe 'vert 2resize ' . ((&columns * 80 + 105) / 210)
-exe '3resize ' . ((&lines * 36 + 32) / 65)
-exe 'vert 3resize ' . ((&columns * 48 + 105) / 210)
-exe '4resize ' . ((&lines * 13 + 32) / 65)
-exe 'vert 4resize ' . ((&columns * 48 + 105) / 210)
-exe '5resize ' . ((&lines * 11 + 32) / 65)
-exe 'vert 5resize ' . ((&columns * 48 + 105) / 210)
+exe 'vert 1resize ' . ((&columns * 80 + 119) / 239)
+exe 'vert 2resize ' . ((&columns * 80 + 119) / 239)
+exe '3resize ' . ((&lines * 38 + 34) / 69)
+exe 'vert 3resize ' . ((&columns * 77 + 119) / 239)
+exe '4resize ' . ((&lines * 16 + 34) / 69)
+exe 'vert 4resize ' . ((&columns * 77 + 119) / 239)
+exe '5resize ' . ((&lines * 10 + 34) / 69)
+exe 'vert 5resize ' . ((&columns * 77 + 119) / 239)
 argglobal
 setlocal keymap=
 setlocal noarabic
@@ -188,7 +191,7 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 31) / 62)
+let s:l = 1 - ((0 * winheight(0) + 33) / 66)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -298,7 +301,7 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 31) / 62)
+let s:l = 1 - ((0 * winheight(0) + 33) / 66)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -408,7 +411,7 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 18) / 36)
+let s:l = 1 - ((0 * winheight(0) + 19) / 38)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -519,7 +522,7 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 6) / 13)
+let s:l = 1 - ((0 * winheight(0) + 8) / 16)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -630,21 +633,21 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 5) / 11)
+let s:l = 1 - ((0 * winheight(0) + 5) / 10)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 1
 normal! 0
 wincmd w
-exe 'vert 1resize ' . ((&columns * 80 + 105) / 210)
-exe 'vert 2resize ' . ((&columns * 80 + 105) / 210)
-exe '3resize ' . ((&lines * 36 + 32) / 65)
-exe 'vert 3resize ' . ((&columns * 48 + 105) / 210)
-exe '4resize ' . ((&lines * 13 + 32) / 65)
-exe 'vert 4resize ' . ((&columns * 48 + 105) / 210)
-exe '5resize ' . ((&lines * 11 + 32) / 65)
-exe 'vert 5resize ' . ((&columns * 48 + 105) / 210)
+exe 'vert 1resize ' . ((&columns * 80 + 119) / 239)
+exe 'vert 2resize ' . ((&columns * 80 + 119) / 239)
+exe '3resize ' . ((&lines * 38 + 34) / 69)
+exe 'vert 3resize ' . ((&columns * 77 + 119) / 239)
+exe '4resize ' . ((&lines * 16 + 34) / 69)
+exe 'vert 4resize ' . ((&columns * 77 + 119) / 239)
+exe '5resize ' . ((&lines * 10 + 34) / 69)
+exe 'vert 5resize ' . ((&columns * 77 + 119) / 239)
 tabedit todo.txt
 set splitbelow splitright
 wincmd _ | wincmd |
@@ -655,8 +658,8 @@ set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
-exe 'vert 1resize ' . ((&columns * 104 + 105) / 210)
-exe 'vert 2resize ' . ((&columns * 105 + 105) / 210)
+exe 'vert 1resize ' . ((&columns * 118 + 119) / 239)
+exe 'vert 2resize ' . ((&columns * 120 + 119) / 239)
 argglobal
 1argu
 edit todo.txt
@@ -761,7 +764,7 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 31) / 62)
+let s:l = 1 - ((0 * winheight(0) + 33) / 66)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -885,7 +888,7 @@ setlocal nowinfixwidth
 setlocal nowrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 18 - ((15 * winheight(0) + 31) / 62)
+let s:l = 18 - ((16 * winheight(0) + 33) / 66)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -893,8 +896,8 @@ normal! zt
 normal! 0
 lcd ~/pyy/iprog/tamapro
 wincmd w
-exe 'vert 1resize ' . ((&columns * 104 + 105) / 210)
-exe 'vert 2resize ' . ((&columns * 105 + 105) / 210)
+exe 'vert 1resize ' . ((&columns * 118 + 119) / 239)
+exe 'vert 2resize ' . ((&columns * 120 + 119) / 239)
 tabnext 1
 if exists('s:wipebuf')
   silent exe 'bwipe ' . s:wipebuf

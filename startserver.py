@@ -6,9 +6,9 @@ import sys
 """Starts the server and calls it every dt seconds
 The first argument (optional) is dt"""
 
-subprocess.Popen(["python", "server.py"])
-time.sleep(0.7)
-port = "8089"
+port = "8087"
+subprocess.Popen(["python", "server.py", port])
+time.sleep(1.5)
 
 if len(sys.argv) > 1:
     dt = int(sys.argv[1])

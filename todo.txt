@@ -13,7 +13,12 @@ rita några bilder
 - Ledsen tama
 - Hungrig tama
 
+Tabeller:
+    TamaListTabell:
+    uid, namn, hunger, mood, hp, ...
 
+    Inventories:
+    uid itemid amount
 
 Features:
 - Lek med dem

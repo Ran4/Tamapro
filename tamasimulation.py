@@ -1,9 +1,11 @@
 import item
 
 class TamaSimulation(object):
-    def __init__(self, uid, name="Unnamed Tamapro"):
+    def __init__(self, uid, name, password=None):
         self.uid = uid
         self.name = name
+        
+        self.password = password
         
         self.type = "basetama"
         
