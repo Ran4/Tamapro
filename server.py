@@ -117,7 +117,9 @@ class Server:
         #r('/', method="GET", callback=self.index)
         r('/', callback=self.index)
         r('/addtama/<name>/<password>', callback=self.createNewTama)
+        r('/addtama/<name>/<password>/', callback=self.createNewTama)
         r('/updatesimulation/<dt>', callback=self.updateSimulation)
+        r('/updatesimulation/<dt>/', callback=self.updateSimulation)
         r('/images/<imagepath:path>', callback=self.getImageRouting)
         r('/<password>/<uid>', callback=self.showCommands)
         r('/<password>/<uid>/', callback=self.showCommands)
@@ -140,9 +142,9 @@ class Server:
         sb = []
         for sim in self.simulations.values():
             url = "{0.password}/{0.uid}/".format(sim)
-            sb.append("<p><a href='{0}'>{1.uid} - {1.name}</a></p>".format(
+            sb.append("<a href='{0}'>{1.uid} - {1.name}</a></br>".format(
                 url, sim))
-        s += "<b>Simulations running:</b>"
+        s += "<b>Simulations running:</b></br>"
         s += "\n".join(sb)
         
         s += "<b>List of items:</b>\n</br>"
@@ -155,7 +157,7 @@ class Server:
         uid = uid[:8]
         self.simulations[uid] = TamaSimulation(uid, name, password)
         
-        return "New user {} with id </br>{}</br> was created!".format(
+        return "New tama {} with id </br>{}</br> was created!".format(
             name, uid)
         
     def doAction(self, password, uid, command, arg=None):
@@ -180,9 +182,9 @@ class Server:
         elif command in con.requiresArguments and arg is None:
             return s + "The %s command is missing an argument" % command
         
-        return self.handleCommand(sim, command, arg)
+        return self.handleCommand(s, sim, command, arg)
         
-    def handleCommand(self, sim, command, arg):
+    def handleCommand(self, s, sim, command, arg):
         #Handle the commands!
         if command == "give":
             if arg not in item.items:
@@ -220,6 +222,26 @@ class Server:
         elif command == "pet":
             response = sim.pet(arg)
             print "DEBUG: After petting, pet mood is now: %s" % sim.mood
+            return response
+        
+        elif command == "playwithitem":
+            if arg not in item.items:
+                return s + "%s is not a valid item!" % arg
+            
+            response = sim.playWithItem(arg)
+            print "DEBUG: After playing with the item %s," % arg,
+            print "pet mood is now: %s" % sim.mood
+            return response
+        
+        elif command == "playwithtama":
+            if arg not in self.simulations:
+                return s + "Tried playing with uid=%s, which doesn't exist!" % \
+                        arg
+            otherTama = self.simulations[arg]
+            response = sim.playWithTama(otherTama)
+            print "DEBUG: After %s played with %s," % (sim.uid, otherTama.uid),
+            print "their moods are %s and %s respectively" % \
+                   (sim.mood, otherTama.mood) 
             return response
         
         #Command wasn't handled if we are here

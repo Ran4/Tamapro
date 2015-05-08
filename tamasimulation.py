@@ -13,12 +13,13 @@ class TamaSimulation(object):
         self.MAX_HUNGER = 100
         self.hunger = self.MAX_HUNGER
         
-        self.mood = "unhappy"
+        self.mood = 50
+        
         self.sick = False
         self.money = 100
         
         self.inventory = []
-        self.eatingPreference = []
+        self.knows = {}
         
     def getDBValueLabels(self):
         """Returns a tuple of names to be used with getDBValues"""
@@ -63,7 +64,7 @@ class TamaSimulation(object):
         """
         directory = "images/tama/%s/" % self.type
         
-        if self.mood == "happy":
+        if self.mood > con.LIKE_LIMIT: 
             return directory + "happy.png"
         else:
             return directory + "regular.png"
@@ -101,18 +102,13 @@ class TamaSimulation(object):
             s += " It healed %s sickness." % (self.possessiveName())
             
         self.inventory.remove(itemStr)
-        
-        #self.mood = "happy"
-        #self.hunger = 0
-        #s += " %s is now %s" % (self.name, self.mood)
-        
         return s
         
     def pet(self, itemStr=None):
         if item.isPettable(itemStr):
-            self.mood = "happy"
+            self.mood += con.MOOD_INCREASE_IF_LIKE
         else:
-            self.mood = "unhappy"
+            self.mood += con.MOOD_INCREASE_IF_DISLIKE
         
         if not itemStr:
             return "%s was petted! New mood: %s" % (self.name, self.mood)
@@ -151,14 +147,14 @@ class TamaSimulation(object):
             
         if self.knows[id2] > con.LOVE_LIMIT:
             s += "%s loves %s!</br>" % (self.name, otherTama.name)
-            self.changeMood(con.MOOD_INCREASE_ON_LOVE)
+            self.changeMood(con.MOOD_INCREASE_IF_LOVE)
         elif self.knows[id2] >= con.LIKE_LIMIT:
-            self.changeMood(con.MOOD_INCREASE_ON_LIKE)
+            self.changeMood(con.MOOD_INCREASE_IF_LIKE)
         elif self.knows[id2] <= con.HATE_LIMIT:
             s += "%s hates %s!</br>" % (self.name, otherTama.name)
-            self.changeMood(con.MOOD_INCREASE_ON_HATE)
+            self.changeMood(con.MOOD_INCREASE_IF_HATE)
         else:
-            self.changeMood(con.MOOD_INCREASE_ON_DISLIKE)
+            self.changeMood(con.MOOD_INCREASE_IF_DISLIKE)
             
         if self.knows[id2] < 0:
             self.knows[id2] = 0
@@ -169,12 +165,9 @@ class TamaSimulation(object):
             
     def updateMood(self):
         if self.hunger > 50:
-            self.mood = "hungry"
+            pass
         else:
-            if self.hp < 50:
-                self.mood = "unhappy"
-            else:
-                self.mood = "good"
+            pass
         
     def updateSimulation(self, dt):
         dtMinutes = dt / 60.0
