@@ -1,6 +1,7 @@
 import uuid
 import sys
 import sqlite3
+import time
 
 from bottle import Bottle, route, run, template, request, static_file
 
@@ -19,6 +20,8 @@ class Server:
         
         self.simulations = {}
         
+        self.loadFromDatabase(verbose=False)
+        
         #Debug stuff
         uid = "debuguid"
         pw = "debugpw"
@@ -27,15 +30,16 @@ class Server:
         
         sim.inventory.append("child")
         sim.inventory.append("banana")
+        
+        print "DEBUG: new sim was added, now saving to db"
+        self.saveToDatabase(verbose=True)
+        print "DEBUG: will now load from database" 
+        self.loadFromDatabase(verbose=True)
 
     def saveToDatabase(self, verbose=True):
         """Saves all simulations to the database"""
-        if verbose:
-            print "Started saving to database..."
-        
         conn = sqlite3.connect(self.dbname)
         c = conn.cursor()
-        ce = c.execute
         if verbose:
             print "Connected to database '%s' and established cursor" % \
                     self.dbname
@@ -63,12 +67,22 @@ class Server:
                     (numItems, len(self.simulations))
                     
         if verbose:
-            print "Successfully saved everything to db!"
+            print "Successfully saved everything to db!\n"
     
-    def loadFromDatabase(self):
+    def loadFromDatabase(self, verbose=True):
         """Loads all simulations from the database"""
-        #conn = sqlite3.connect(self.dbname)
-        #c = conn.cursor()
+        conn = sqlite3.connect(self.dbname)
+        c = conn.cursor()
+        
+        if verbose:
+            print "Connected to database '%s' and established cursor" % \
+                    self.dbname
+        
+        c.execute("SELECT * FROM tamas")
+        propList  = c.fetchall()
+        if verbose:
+            print "SELECT answer:", propList 
+        
         
         #First, populate list of simulations
         """
@@ -82,7 +96,10 @@ class Server:
         for uid, itemName, amount in c.execute("SELECT uid, name, amount FROM has"):
             for _ in range(amount):
                 self.simulations[uid].inventory.add(itemName)
-       """ 
+        """ 
+       
+        if verbose:
+            print "Successfully loaded everything from db!\n"
     
     def start(self):
         self.app.run(host=self.host, port=self.port)
