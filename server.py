@@ -1,5 +1,6 @@
 import uuid
 import sys
+import sqlite3
 
 from bottle import Bottle, route, run, template, request, static_file
 
@@ -17,7 +18,6 @@ class Server:
         self.dbname = "tamapro_database.db"
         
         self.simulations = {}
-        self.hej = self.saveToDatabase
         
         #Debug stuff
         uid = "debuguid"
@@ -28,9 +28,42 @@ class Server:
         sim.inventory.append("child")
         sim.inventory.append("banana")
 
-    def saveToDatabase(self):
+    def saveToDatabase(self, verbose=True):
         """Saves all simulations to the database"""
-        pass
+        if verbose:
+            print "Started saving to database..."
+        
+        conn = sqlite3.connect(self.dbname)
+        c = conn.cursor()
+        ce = c.execute
+        if verbose:
+            print "Connected to database '%s' and established cursor" % \
+                    self.dbname
+        
+        #Add all the tamas base information
+        tamaValues = [sim.getDBValues() for sim in self.simulations.values()]
+        c.executemany("INSERT INTO tamas VALUES (?,?,?,?,?,?,?,?)", tamaValues)
+        if verbose:
+            print "  %s tamas inserted into database" % \
+                    len(self.simulations)
+        
+        #Add all tamas inventory to the has table
+        numItems = 0
+        for sim in self.simulations.values():
+            if verbose == 2: #extra verbose!
+                print "    Tries inserting inventory for tama %s (uid=%s)..." %\
+                        (sim.name, sim.uid)
+            
+            itemDBValues = sim.getInventoryDBValues()
+            c.executemany("INSERT INTO has VALUES (?,?,?)", itemDBValues)
+            numItems += len(itemDBValues)
+            
+        if verbose:
+            print "  %s item entries from %s tamas inserted into database" % \
+                    (numItems, len(self.simulations))
+                    
+        if verbose:
+            print "Successfully saved everything to db!"
     
     def loadFromDatabase(self):
         """Loads all simulations from the database"""
@@ -153,7 +186,10 @@ class Server:
             return "%s switched name to %s" % (oldName, sim.name)
             
         elif command == "status":
-            return sim.getStatusReport()
+            return sim.getStatusJSON()
+        
+        elif command == "statushtml":
+            return sim.getStatusJSON(formatForHTML=True)
         
         elif command == "eat":
             if arg not in item.items:
@@ -186,16 +222,20 @@ class Server:
         for sim in self.simulations.values():
             sim.updateSimulation(dt)
             
+        self.saveToDatabase(verbose=True)
         return "Successfully ran updateSimulation"
         
     #Simulation stuff
 
 def main():
+    host = '0.0.0.0'
     if len(sys.argv) > 1:
         port = int(sys.argv[1])
+        if len(sys.argv) > 2:
+            host = sys.argv[2]
     else:
         port = 8087
-    server = Server(host='0.0.0.0', port=port)
+    server = Server(host=host, port=port)
     server.start()
    
 if __name__ == "__main__":

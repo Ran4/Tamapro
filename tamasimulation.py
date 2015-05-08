@@ -1,27 +1,55 @@
+import json
+
 import item
 
 class TamaSimulation(object):
     def __init__(self, uid, name, password=None):
         self.uid = uid
-        self.name = name
-        
-        self.password = password
-        
         self.type = "basetama"
-        
-        self.mood = "unhappy"
+        self.password = password
+        self.name = name
         
         self.MAX_HUNGER = 100
         self.hunger = self.MAX_HUNGER
         
-        self.MAX_HP = 100
-        self.hp = self.MAX_HP
-        
-        self.poisoned = False
+        self.mood = "unhappy"
+        self.sick = False
+        self.money = 100
         
         self.inventory = []
         self.eatingPreference = []
         
+    def getDBValueLabels(self):
+        """Returns a tuple of names to be used with getDBValues"""
+        return ("uid", "type", "password", "name",
+                "hunger", "mood", "sick","money")
+        
+    def getDBValues(self):
+        """Returns a tuple of values to be inserted into a database"""
+        return (self.uid, self.type, self.password, self.name, 
+                self.hunger, self.mood, self.sick, self.money)
+        
+    def getInventoryDBValues(self):
+        """Returns a list of tuples of items (uid,key,amount))
+        to be inserted into a database"""
+        keys = set(self.inventory) #get unique values
+        itemDBValues = []
+        for key in keys:
+            itemDBValues.append((self.uid, key, self.inventory.count(key)))
+        
+        return itemDBValues
+        
+    def readDBValues(self, dbValuesTuple):
+        """Reads a tuple of values read from a database"""
+        self.uid, self.type, self.password, self.name, self.hunger,\
+                self.mood, self.sick, self.money = dbValuesTuple
+                
+    def readInventoryDBValues(self, dbValuesTuple):
+        """Reads a tuple of values read from a database"""
+        #self.uid, self.type, self.password, self.name, self.hunger,\
+        #        self.mood, self.sick, self.money = dbValuesTuple
+        pass
+
     def possessiveName(self):
         if self.name.endswith("s","z"):
             return self.name + "'"
@@ -39,14 +67,14 @@ class TamaSimulation(object):
         else:
             return directory + "regular.png"
             
-    def getStatusReport(self):
-        return """<img src='{1}'></img>
-        mood: {0.mood}
-        hunger: {0.hunger}/{0.MAX_HUNGER}
-        hp: {0.hp}/{0.MAX_HP}
-        
-        type: {0.type}
-        """.replace("\n","</br>\n").format(self, "/"+self.getImageFileName())
+    def getStatusJSON(self, formatForHTML=False):
+        valueDict = dict(zip(self.getDBValueLabels(), self.getDBValues()))
+        s = json.dumps(valueDict, indent=4)
+        if formatForHTML:
+            s = s.replace("\n", "</br>\n").replace('"','').replace(":",": ")
+            s = s.replace("{","Status:").replace("}", "")
+        return s
+        #"<img src='%s'></img>" % ("/"+self.getImageFileName())
         
     def addItem(self, itemStr):
         self.inventory.append(itemStr)
@@ -62,14 +90,14 @@ class TamaSimulation(object):
         s = "%s ate a %s!" % (self.name, itemStr)
             
         if item.hasProperty(itemStr, item.POISONOUS):
-            if not self.poisoned: #only tell if we're not already poisoned
-                s += " It poisoned %s!" % self.name
+            if not self.sick: #only tell if we're not already sick
+                s += " It sickened %s!" % self.name
             
-            self.poisoned = True
+            self.sick = True
         
-        if self.poisoned and item.isHealing(itemStr):
-            self.poisoned = False
-            s += " It healed %s poison." % (self.possessiveName())
+        if self.sick and item.isHealing(itemStr):
+            self.sick = False
+            s += " It healed %s sickness." % (self.possessiveName())
             
         self.inventory.remove(itemStr)
         
@@ -91,9 +119,9 @@ class TamaSimulation(object):
         s = "%s was petted with a %s!" % (self.name, itemStr)
             
         if item.hasProperty(itemStr, item.POISONOUS):
-            if not self.poisoned: #only tell if we're not already poisoned
-                s += " It poisoned %s!" % self.name
-            self.poisoned = True
+            if not self.sick: #only tell if we're not already sick
+                s += " It sickened %s!" % self.name
+            self.sick = True
         
         s += " New mood: %s" % self.mood
         
