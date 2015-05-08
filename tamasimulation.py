@@ -1,6 +1,7 @@
 import json
 
 import item
+import constants as con
 
 class TamaSimulation(object):
     def __init__(self, uid, name, password=None):
@@ -125,6 +126,45 @@ class TamaSimulation(object):
         
         s += " New mood: %s" % self.mood
         
+        return s
+    
+    def changeMood(self, amount):
+        self.mood += amount
+        if self.mood < 0:
+            self.mood = 0
+        elif self.mood > con.MAX_MOOD:
+            self.mood = con.MAX_MOOD
+    
+    def playWithTama(self, otherTama):
+        s = ""
+        id2 = otherTama.uid
+        if id2 not in self.knows:
+            self.knows[id2] = con.START_KNOWLEDGE_LEVEL
+            s += "%s just learned about %s!</br>" % (self.name, otherTama.name)
+            
+        if self.knows[id2] < con.LIKE_LIMIT: #dislikes, will dislike more
+            self.knows[id2] += con.CHANGE_ON_DISLIKE
+            s += "%s now likes %s less...</br>" % (self.name, otherTama.name)
+        else:
+            self.knows[id2] += con.CHANGE_ON_LIKE
+            s += "%s now likes %s more!</br>" % (self.name, otherTama.name)
+            
+        if self.knows[id2] > con.LOVE_LIMIT:
+            s += "%s loves %s!</br>" % (self.name, otherTama.name)
+            self.changeMood(con.MOOD_INCREASE_ON_LOVE)
+        elif self.knows[id2] >= con.LIKE_LIMIT:
+            self.changeMood(con.MOOD_INCREASE_ON_LIKE)
+        elif self.knows[id2] <= con.HATE_LIMIT:
+            s += "%s hates %s!</br>" % (self.name, otherTama.name)
+            self.changeMood(con.MOOD_INCREASE_ON_HATE)
+        else:
+            self.changeMood(con.MOOD_INCREASE_ON_DISLIKE)
+            
+        if self.knows[id2] < 0:
+            self.knows[id2] = 0
+        elif self.knows[id2] > con.MAX_KNOWLEDGE_LEVEL:
+            self.knows[id2] = con.MAX_KNOWLEDGE_LEVEL
+            
         return s
             
     def updateMood(self):

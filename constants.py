@@ -1,3 +1,23 @@
 commandList = ["eat", "pet", "give",
     "inventory", "getimage", "rename", "status", "statushtml"]
 requiresArguments = ["eat", "give", "rename"]
+
+START_KNOWLEDGE_LEVEL = 50
+MAX_KNOWLEDGE_LEVEL = 100
+
+##############################
+#Like limits
+DISLIKE_LIMIT = 50
+HATE_LIMIT = 25
+LOVE_LIMIT = 75
+CHANGE_ON_LIKE = 5
+CHANGE_ON_DISLIKE = -5
+
+##############################
+#Mood stuff
+MAX_MOOD = 100
+#How much the mood value will change when playing with another tama or item
+MOOD_INCREASE_IF_LOVE = 5
+MOOD_INCREASE_IF_HATE = -5
+MOOD_INCREASE_IF_LIKE = 3
+MOOD_INCREASE_IF_DISLIKE = -3

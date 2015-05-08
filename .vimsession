@@ -85,11 +85,11 @@ wincmd t
 set winheight=1 winwidth=1
 exe 'vert 1resize ' . ((&columns * 80 + 119) / 239)
 exe 'vert 2resize ' . ((&columns * 80 + 119) / 239)
-exe '3resize ' . ((&lines * 21 + 34) / 68)
+exe '3resize ' . ((&lines * 24 + 34) / 68)
 exe 'vert 3resize ' . ((&columns * 77 + 119) / 239)
-exe '4resize ' . ((&lines * 27 + 34) / 68)
+exe '4resize ' . ((&lines * 25 + 34) / 68)
 exe 'vert 4resize ' . ((&columns * 77 + 119) / 239)
-exe '5resize ' . ((&lines * 15 + 34) / 68)
+exe '5resize ' . ((&lines * 14 + 34) / 68)
 exe 'vert 5resize ' . ((&columns * 77 + 119) / 239)
 argglobal
 setlocal keymap=
@@ -193,12 +193,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 10 - ((0 * winheight(0) + 32) / 65)
+let s:l = 235 - ((31 * winheight(0) + 32) / 65)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-10
-normal! 0
+235
+normal! 04l
 wincmd w
 argglobal
 2argu
@@ -303,12 +303,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 32 - ((0 * winheight(0) + 32) / 65)
+let s:l = 145 - ((43 * winheight(0) + 32) / 65)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-32
-normal! 07l
+145
+normal! 046l
 wincmd w
 argglobal
 3argu
@@ -414,11 +414,11 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 10) / 21)
+let s:l = 4 - ((1 * winheight(0) + 12) / 24)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
+4
 normal! 0
 wincmd w
 argglobal
@@ -524,7 +524,7 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 13) / 27)
+let s:l = 1 - ((0 * winheight(0) + 12) / 25)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -670,21 +670,20 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 7) / 15)
+let s:l = 1 - ((0 * winheight(0) + 7) / 14)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 1
 normal! 0
 wincmd w
-2wincmd w
 exe 'vert 1resize ' . ((&columns * 80 + 119) / 239)
 exe 'vert 2resize ' . ((&columns * 80 + 119) / 239)
-exe '3resize ' . ((&lines * 21 + 34) / 68)
+exe '3resize ' . ((&lines * 24 + 34) / 68)
 exe 'vert 3resize ' . ((&columns * 77 + 119) / 239)
-exe '4resize ' . ((&lines * 27 + 34) / 68)
+exe '4resize ' . ((&lines * 25 + 34) / 68)
 exe 'vert 4resize ' . ((&columns * 77 + 119) / 239)
-exe '5resize ' . ((&lines * 15 + 34) / 68)
+exe '5resize ' . ((&lines * 14 + 34) / 68)
 exe 'vert 5resize ' . ((&columns * 77 + 119) / 239)
 tabedit todo.txt
 set splitbelow splitright
@@ -934,7 +933,6 @@ normal! zt
 normal! 0
 lcd ~/pyy/iprog/tamapro
 wincmd w
-2wincmd w
 exe 'vert 1resize ' . ((&columns * 118 + 119) / 239)
 exe 'vert 2resize ' . ((&columns * 120 + 119) / 239)
 tabnext 1
