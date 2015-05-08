@@ -129,7 +129,6 @@ class Server:
     # ROUTING
     #############################################################
     
-    #def getImageRouting(self, imagepath):
     def getImageRouting(self, imagepath):
         fullPath = "images/" + imagepath
         return static_file(imagepath, root='images')
@@ -140,7 +139,9 @@ class Server:
         
         sb = []
         for sim in self.simulations.values():
-            sb.append("<p>{0.uid} - {0.name}</p>".format(sim))
+            url = "{0.password}/{0.uid}/".format(sim)
+            sb.append("<p><a href='{0}'>{1.uid} - {1.name}</a></p>".format(
+                url, sim))
         s += "<b>Simulations running:</b>"
         s += "\n".join(sb)
         
@@ -156,7 +157,6 @@ class Server:
         
         return "New user {} with id </br>{}</br> was created!".format(
             name, uid)
-            
         
     def doAction(self, password, uid, command, arg=None):
         sim = self.getSimFromUID(uid)
@@ -179,8 +179,10 @@ class Server:
             return s + "Unknown command!"
         elif command in con.requiresArguments and arg is None:
             return s + "The %s command is missing an argument" % command
-            
-            
+        
+        return self.handleCommand(sim, command, arg)
+        
+    def handleCommand(self, sim, command, arg):
         #Handle the commands!
         if command == "give":
             if arg not in item.items:
@@ -221,11 +223,14 @@ class Server:
             return response
         
         #Command wasn't handled if we are here
-        return s + "Command wasn't handled."
+        return s + "Command %s wasn't handled." % command
         
     def showCommands(self, password, uid):
-        s = "Commands:</br>"
-        s += "</br>".join(con.commandList)
+        s = "<a href='../../'>(Go back to stat page)</a></br>"
+        s += "Commands:</br>"
+        for command in con.commandList:
+            s += "<a href='%s'>%s</a></br>" % (command+"/", command)
+        #s += "</br>".join(con.commandList)
         return s
         
     def updateSimulation(self, dt):
