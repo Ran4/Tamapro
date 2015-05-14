@@ -47,7 +47,7 @@ class TamaSimulation(object):
 
     def readInventoryDBValues(self, dbValuesTuple):
         """Reads a tuple of values read from a database"""
-        #self.uid, self.type, self.password, self.name, self.hunger,\
+        #self.uid, self.type, self.password, self.hunger,\
         #        self.mood, self.sick, self.money = dbValuesTuple
         pass
 

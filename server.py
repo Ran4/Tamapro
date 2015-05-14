@@ -115,16 +115,16 @@ class Server:
         r = self.app.route
         #r('/', method="GET", callback=self.index)
         r('/', callback=self.index)
-        r('/addtama/<name>/<password>', callback=self.createNewTama)
-        r('/addtama/<name>/<password>/', callback=self.createNewTama)
+        r('/addtama/<uid>/<password>', callback=self.createNewTama)
+        r('/addtama/<uid>/<password>/', callback=self.createNewTama)
         r('/updatesimulation/<dt>', callback=self.updateSimulation)
         r('/updatesimulation/<dt>/', callback=self.updateSimulation)
         r('/images/<imagepath:path>', callback=self.getImageRouting)
-        r('/<password>/<uid>', callback=self.showCommands)
-        r('/<password>/<uid>/', callback=self.showCommands)
-        r('/<password>/<uid>/<command>', callback=self.doAction)
-        r('/<password>/<uid>/<command>/', callback=self.doAction)
-        r('/<password>/<uid>/<command>/<arg>', callback=self.doAction)
+        r('/<uid>/<password>', callback=self.showCommands)
+        r('/<uid>/<password>/', callback=self.showCommands)
+        r('/<uid>/<password>/<command>', callback=self.doAction)
+        r('/<uid>/<password>/<command>/', callback=self.doAction)
+        r('/<uid>/<password>/<command>/<arg>', callback=self.doAction)
 
     #############################################################
     # ROUTING
@@ -152,7 +152,7 @@ class Server:
         return s
 
     def createNewTama(self, uid, password):
-        sim = getSimFromUID(uid)
+        sim = self.getSimFromUID(uid)
         if not sim:
             self.simulations[uid] = TamaSimulation(uid, password)
             return "New tama with id </br>{}</br> was created!".format(uid)
@@ -162,7 +162,7 @@ class Server:
 
         return
 
-    def doAction(self, password, uid, command, arg=None):
+    def doAction(self, uid, password, command, arg=None):
         sim = self.getSimFromUID(uid)
         if not sim:
             return "Couldn't find tama with uid {}".format(uid)
@@ -244,7 +244,7 @@ class Server:
         #Command wasn't handled if we are here
         return s + "Command %s wasn't handled." % command
 
-    def showCommands(self, password, uid):
+    def showCommands(self, uid, password):
         s = "<a href='../../'>(Go back to stat page)</a></br>"
         s += "Commands:</br>"
         for command in con.commandList:
