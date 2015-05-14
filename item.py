@@ -32,12 +32,11 @@ def isEdible(itemName):
 def isTasty(itemName):
     if itemName not in items: return False
     return items[itemName] & TASTY
-    
+
 def isPettable(itemName):
     if itemName not in items: return False
     return items[itemName] & PETTABLE
-    
+
 def isHealing(itemName):
     if itemName not in items: return False
     return items[itemName] & HEALING
-    
