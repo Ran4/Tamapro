@@ -152,9 +152,15 @@ class Server:
         return s
 
     def createNewTama(self, uid, password):
-        self.simulations[uid] = TamaSimulation(uid, password)
+        sim = getSimFromUID(uid)
+        if not sim:
+            self.simulations[uid] = TamaSimulation(uid, password)
+            return "New tama with id </br>{}</br> was created!".format(uid)
 
-        return "New tama with id </br>{}</br> was created!".format(uid)
+        else:
+            return "Tama with id </br>{}</br> already exists!".format(uid)
+
+        return
 
     def doAction(self, password, uid, command, arg=None):
         sim = self.getSimFromUID(uid)
