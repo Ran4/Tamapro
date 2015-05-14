@@ -45,7 +45,7 @@ class Server:
 
         #Add all the tamas base information
         tamaValues = [sim.getDBValues() for sim in self.simulations.values()]
-        c.executemany("INSERT INTO tamas VALUES (?,?,?,?,?,?,?,?)", tamaValues)
+        c.executemany("INSERT INTO tamas VALUES (?,?,?,?,?,?,?)", tamaValues)
         if verbose:
             print "  %s tamas inserted into database" % \
                     len(self.simulations)
