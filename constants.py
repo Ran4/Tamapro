@@ -1,6 +1,6 @@
 commandList = ["eat", "pet", "playwithitem", "playwithtama", "give",
-    "inventory", "getimage", "rename", "status", "statushtml"]
-requiresArguments = ["eat", "give", "rename",
+    "inventory", "getimage", "status", "statushtml"]
+requiresArguments = ["eat", "give",
     "playwithitem", "playwithtama"]
 
 START_KNOWLEDGE_LEVEL = 50
@@ -25,4 +25,3 @@ MOOD_INCREASE_IF_LIKE = 3
 MOOD_INCREASE_IF_DISLIKE = -3
 MOOD_CHANGE_ON_HIGH_HUNGER = -5
 MOOD_CHANGE_ON_MEDIUM_HUNGER = -3
-
