@@ -1,6 +1,7 @@
 import sys
 import sqlite3
 import time
+import json
 
 from bottle import Bottle, route, run, template, request, static_file
 
@@ -117,6 +118,8 @@ class Server:
         r('/', callback=self.index)
         r('/addtama/<uid>/<password>', callback=self.createNewTama)
         r('/addtama/<uid>/<password>/', callback=self.createNewTama)
+        r('/json/addtama/<uid>/<password>', callback=self.createNewTamaJSON)
+        r('/json/addtama/<uid>/<password>/', callback=self.createNewTamaJSON)
         r('/updatesimulation/<dt>', callback=self.updateSimulation)
         r('/updatesimulation/<dt>/', callback=self.updateSimulation)
         r('/images/<imagepath:path>', callback=self.getImageRouting)
@@ -159,6 +162,19 @@ class Server:
 
         else:
             return "Tama with id </br>{}</br> already exists!".format(uid)
+
+        return
+
+    def createNewTamaJSON(self, uid, password):
+        sim = self.getSimFromUID(uid)
+        if not sim:
+            self.simulations[uid] = TamaSimulation(uid, password)
+            jsonObj = {"error": False, "message": "Tama created."}
+            return json.dumps(jsonObj, indent=4, separators=(",", ": "))
+
+        else:
+            jsonObj = {"error": True, "message": "Tama with name {} already exists.".format(uid)}
+            return json.dumps(jsonObj, indent=4, separators=(",", ": "))
 
         return
 
