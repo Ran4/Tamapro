@@ -123,6 +123,26 @@ class TamaSimulation(object):
 
         return s
 
+    def petJSON(self, itemStr=None):
+        if item.isPettable(itemStr):
+            self.mood += con.MOOD_INCREASE_IF_LIKE
+        else:
+            self.mood += con.MOOD_INCREASE_IF_DISLIKE
+
+        if not itemStr:
+            return "%s was petted! New mood: %s" % (self.uid, self.mood)
+
+        s = "%s was petted with a %s!" % (self.uid, itemStr)
+
+        if item.hasProperty(itemStr, item.POISONOUS):
+            if not self.sick: #only tell if we're not already sick
+                s += " It sickened %s!" % self.uid
+            self.sick = True
+
+        s += " New mood: %s" % self.mood
+
+        return s
+
     def changeMood(self, amount):
         self.mood += amount
         if self.mood < 0:

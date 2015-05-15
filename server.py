@@ -122,6 +122,9 @@ class Server:
         r('/json/addtama/<uid>/<password>/', callback=self.createNewTamaJSON)
         r('/json/<uid>/<password>', callback=self.login)
         r('/json/<uid>/<password>/', callback=self.login)
+        r('/json/<uid>/<password>/<command>', callback=self.doActionJSON)
+        r('/json/<uid>/<password>/<command>/', callback=self.doActionJSON)
+        r('/json/<uid>/<password>/<command>/<arg>', callback=self.doActionJSON)
         r('/updatesimulation/<dt>', callback=self.updateSimulation)
         r('/updatesimulation/<dt>/', callback=self.updateSimulation)
         r('/images/<imagepath:path>', callback=self.getImageRouting)
@@ -218,6 +221,30 @@ class Server:
 
         return self.handleCommand(s, sim, command, arg)
 
+    def doActionJSON(self, uid, password, command, arg=None):
+        sim = self.getSimFromUID(uid)
+        if not sim:
+            jsonObj = {"error": True, "message": "Tama {} does not exist.".format(uid)}
+            return json.dumps(jsonObj, indent=4, separators=(",", ": "))
+
+        if sim.password and sim.password != password:
+            jsonObj = {"error": True, "message": "Wrong password."}
+            return json.dumps(jsonObj, indent=4, separators=(",", ": "))
+
+        #jsonObj = {"error": False, "message": "Success."}
+        #return json.dumps(jsonObj, indent=4, separators=(",", ": "))
+
+        #Make sure that the command exists and that it has args if needed
+        if command not in con.commandList:
+            jsonObj = {"error": True, "message": "Unknown command."}
+            return json.dumps(jsonObj, indent=4, separators=(",", ": "))
+        elif command in con.requiresArguments and arg is None:
+            msg = "The %s command is missing an argument" % command
+            jsonObj = {"error": True, "message": msg}
+            return json.dumps(jsonObj, indent=4, separators=(",", ": "))
+
+        return self.handleCommandJSON(sim, command, arg)
+
     def handleCommand(self, s, sim, command, arg):
         #Handle the commands!
         if command == "give":
@@ -250,6 +277,64 @@ class Server:
 
         elif command == "pet":
             response = sim.pet(arg)
+            print "DEBUG: After petting, pet mood is now: %s" % sim.mood
+            return response
+
+        elif command == "playwithitem":
+            if arg not in item.items:
+                return s + "%s is not a valid item!" % arg
+
+            response = sim.playWithItem(arg)
+            print "DEBUG: After playing with the item %s," % arg,
+            print "pet mood is now: %s" % sim.mood
+            return response
+
+        elif command == "playwithtama":
+            if arg not in self.simulations:
+                return s + "Tried playing with uid=%s, which doesn't exist!" % \
+                        arg
+            otherTama = self.simulations[arg]
+            response = sim.playWithTama(otherTama)
+            print "DEBUG: After %s played with %s," % (sim.uid, otherTama.uid),
+            print "their moods are %s and %s respectively" % \
+                   (sim.mood, otherTama.mood)
+            return response
+
+        #Command wasn't handled if we are here
+        return s + "Command %s wasn't handled." % command
+
+    def handleCommandJSON(self, sim, command, arg):
+        #Handle the commands!
+        if command == "give":
+            if arg not in item.items:
+                return s + "%s is not a valid item!" % arg
+
+            return s + sim.addItem(arg)
+
+        elif command == "inventory":
+            #returns item
+            return "\n".join(sim.inventory)
+
+        elif command == "getimage":
+            fileName = sim.getImageFileName()
+            print "Serving image with path %s" % fileName
+            return static_file(fileName, root='')
+
+        elif command == "status":
+            return sim.getStatusJSON()
+
+        elif command == "statushtml":
+            return sim.getStatusJSON(formatForHTML=True)
+
+        elif command == "eat":
+            if arg not in item.items:
+                return s + "%s is not a valid item!" % arg
+
+            response = sim.eat(arg)
+            return response
+
+        elif command == "pet":
+            response = sim.petJSON(arg)
             print "DEBUG: After petting, pet mood is now: %s" % sim.mood
             return response
 
