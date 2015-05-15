@@ -120,6 +120,8 @@ class Server:
         r('/addtama/<uid>/<password>/', callback=self.createNewTama)
         r('/json/addtama/<uid>/<password>', callback=self.createNewTamaJSON)
         r('/json/addtama/<uid>/<password>/', callback=self.createNewTamaJSON)
+        r('/json/<uid>/<password>', callback=self.login)
+        r('/json/<uid>/<password>/', callback=self.login)
         r('/updatesimulation/<dt>', callback=self.updateSimulation)
         r('/updatesimulation/<dt>/', callback=self.updateSimulation)
         r('/images/<imagepath:path>', callback=self.getImageRouting)
@@ -177,6 +179,20 @@ class Server:
             return json.dumps(jsonObj, indent=4, separators=(",", ": "))
 
         return
+
+    def login(self, uid, password):
+        sim = self.getSimFromUID(uid)
+        if not sim:
+            jsonObj = {"error": True, "message": "Tama {} does not exist.".format(uid)}
+            return json.dumps(jsonObj, indent=4, separators=(",", ": "))
+
+        if sim.password and sim.password != password:
+            jsonObj = {"error": True, "message": "Wrong password."}
+            return json.dumps(jsonObj, indent=4, separators=(",", ": "))
+
+        jsonObj = {"error": False, "message": "Success."}
+        return json.dumps(jsonObj, indent=4, separators=(",", ": "))
+
 
     def doAction(self, uid, password, command, arg=None):
         sim = self.getSimFromUID(uid)
