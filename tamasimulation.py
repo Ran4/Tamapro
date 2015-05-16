@@ -119,9 +119,9 @@ class TamaSimulation(object):
                 s += " It sickened %s!" % self.uid
             self.sick = True
 
-        s += " New mood: %s" % self.mood
+        jsonObj = {"error": False, "message": s}
 
-        return s
+        return jsonObj
 
     def petJSON(self, itemStr=None):
         if item.isPettable(itemStr):
@@ -130,7 +130,9 @@ class TamaSimulation(object):
             self.mood += con.MOOD_INCREASE_IF_DISLIKE
 
         if not itemStr:
-            return "%s was petted! New mood: %s" % (self.uid, self.mood)
+            msg = "%s was petted!" % (self.uid)
+            jsonObj = {"error": False, "message": msg}
+            return jsonObj
 
         s = "%s was petted with a %s!" % (self.uid, itemStr)
 
