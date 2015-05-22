@@ -134,16 +134,14 @@ class TamaSimulation(object):
             jsonObj = {"error": False, "message": msg}
             return jsonObj
 
-        s = "%s was petted with a %s!" % (self.uid, itemStr)
+        msg = "%s was petted with a %s!" % (self.uid, itemStr)
 
         if item.hasProperty(itemStr, item.POISONOUS):
             if not self.sick: #only tell if we're not already sick
-                s += " It sickened %s!" % self.uid
+                msg += " It sickened %s!" % self.uid
             self.sick = True
 
-        s += " New mood: %s" % self.mood
-
-        return s
+        return {"error": False, "message": msg}
 
     def changeMood(self, amount):
         self.mood += amount
