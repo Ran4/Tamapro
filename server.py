@@ -323,9 +323,6 @@ class Server:
         elif command == "status":
             return sim.getStatusJSON()
 
-        elif command == "statushtml":
-            return sim.getStatusJSON(formatForHTML=True)
-
         elif command == "eat":
             if arg not in item.items:
                 return s + "%s is not a valid item!" % arg
