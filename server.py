@@ -313,8 +313,8 @@ class Server:
 
         elif command == "inventory":
             #returns item
-            return "\n".join(sim.inventory)
-
+            return {"error": False, "items": sim.inventory}
+            
         elif command == "getimage":
             fileName = sim.getImageFileName()
             print "Serving image with path %s" % fileName
