@@ -2,6 +2,7 @@ Works in app:
 Log in and show info
 Create new tamas
 Pet
+Pet with item
 List items
 
 
@@ -19,6 +20,7 @@ Not in server yet:
 
 Other:
 Saving stuff to database does not work yet.
+Eating items / Petting with items should consume them.
 (Bonus, if we have time) Change the way the server is updated, remove routing /updatesimulation/<dt>
 
 
