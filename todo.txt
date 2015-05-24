@@ -14,6 +14,7 @@ Not in server yet:
 [x] Play with item
 [x] Play with friend
 [] Buy item
+[] List friends
 [] Add friend
 [x] List all items (shop)
 
