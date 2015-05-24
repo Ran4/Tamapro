@@ -346,7 +346,7 @@ class Server:
         elif command == "pet":
             response = sim.petJSON(arg)
             print "DEBUG: After petting, pet mood is now: %s" % sim.mood
-            return json.dumps({"error": True, "message": response})
+            return response
 
         elif command == "playwithitem":
             if arg not in item.items:
