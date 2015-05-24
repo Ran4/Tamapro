@@ -304,12 +304,16 @@ class Server:
         return s + "Command %s wasn't handled." % command
 
     def handleCommandJSON(self, sim, command, arg):
+        s = ""
+        
         #Handle the commands!
         if command == "give":
             if arg not in item.items:
-                return s + "%s is not a valid item!" % arg
+                s += "%s is not a valid item!" % arg
+                return json.dumps({"error":True, "message": s})
 
-            return s + sim.addItem(arg)
+            response = sim.addItemJSON(arg)
+            return response
 
         elif command == "inventory":
             #returns item
@@ -325,19 +329,21 @@ class Server:
 
         elif command == "eat":
             if arg not in item.items:
-                return s + "%s is not a valid item!" % arg
+                s += "%s is not a valid item!" % arg
+                return json.dumps({"error": True, "message": s})
 
-            response = sim.eat(arg)
+            response = sim.eatJSON(arg)
             return response
 
         elif command == "pet":
             response = sim.petJSON(arg)
             print "DEBUG: After petting, pet mood is now: %s" % sim.mood
-            return response
+            return json.dumps({"error": True, "message": response})
 
         elif command == "playwithitem":
             if arg not in item.items:
-                return s + "%s is not a valid item!" % arg
+                s += "%s is not a valid item!" % arg
+                return json.dumps({"error": True, "message": s})
 
             response = sim.playWithItem(arg)
             print "DEBUG: After playing with the item %s," % arg,
@@ -356,7 +362,8 @@ class Server:
             return response
 
         #Command wasn't handled if we are here
-        return s + "Command %s wasn't handled." % command
+        s += "Command %s wasn't handled." % command
+        return json.dumps({"error": True, "message": s})
 
     def showCommands(self, uid, password):
         s = "<a href='../../'>(Go back to stat page)</a></br>"

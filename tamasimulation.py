@@ -80,6 +80,11 @@ class TamaSimulation(object):
     def addItem(self, itemStr):
         self.inventory.append(itemStr)
         return "%s now has a %s" % (self.uid, itemStr)
+        
+    def addItemJSON(self, itemStr):
+        self.inventory.append(itemStr)
+        s = "%s now has a %s" % (self.uid, itemStr)
+        return json.dumps({"error": False, "message:", s})
 
     def eat(self, itemStr):
         if itemStr not in self.inventory:
@@ -102,6 +107,39 @@ class TamaSimulation(object):
 
         self.inventory.remove(itemStr)
         return s
+        
+    def eatJSON(self, itemStr):
+        """Eats an item.
+        Returns a dictionary to be JSON'ed later on
+        """
+        if itemStr is None
+            return json.dumps(
+                {"error": True, "message": "Tried to eat nothing!"})
+        
+        if itemStr not in self.inventory:
+            s = "%s doesn't have a %s" % (self.uid, itemStr)
+            
+            return json.dumps(
+                {"error": False, "message": s})
+
+        if not item.isEdible(itemStr):
+            s = "%s can't eat a %s" % (self.uid, itemStr)
+            return json.dumps({"error": False, "message": s})
+
+        s = "%s ate a %s!" % (self.uid, itemStr)
+
+        if item.hasProperty(itemStr, item.POISONOUS):
+            if not self.sick: #only tell if we're not already sick
+                s += " It sickened %s!" % self.uid
+
+            self.sick = True
+
+        if self.sick and item.isHealing(itemStr):
+            self.sick = False
+            s += " It healed %s sickness." % (self.possessiveName())
+
+        self.inventory.remove(itemStr)
+        return json.dumps({"error": False, "message": s})
 
     def pet(self, itemStr=None):
         if item.isPettable(itemStr):
@@ -131,8 +169,7 @@ class TamaSimulation(object):
 
         if not itemStr:
             msg = "%s was petted!" % (self.uid)
-            jsonObj = {"error": False, "message": msg}
-            return jsonObj
+            return json.dumps({"error": False, "message": msg})
 
         msg = "%s was petted with a %s!" % (self.uid, itemStr)
 
@@ -141,7 +178,7 @@ class TamaSimulation(object):
                 msg += " It sickened %s!" % self.uid
             self.sick = True
 
-        return {"error": False, "message": msg}
+        return json.dumps({"error": False, "message": msg})
 
     def changeMood(self, amount):
         self.mood += amount
