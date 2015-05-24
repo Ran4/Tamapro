@@ -80,11 +80,11 @@ class TamaSimulation(object):
     def addItem(self, itemStr):
         self.inventory.append(itemStr)
         return "%s now has a %s" % (self.uid, itemStr)
-        
+
     def addItemJSON(self, itemStr):
         self.inventory.append(itemStr)
         s = "%s now has a %s" % (self.uid, itemStr)
-        return json.dumps({"error": False, "message:", s})
+        return json.dumps({"error": False, "message:": s})
 
     def eat(self, itemStr):
         if itemStr not in self.inventory:
@@ -107,18 +107,18 @@ class TamaSimulation(object):
 
         self.inventory.remove(itemStr)
         return s
-        
+
     def eatJSON(self, itemStr):
         """Eats an item.
         Returns a dictionary to be JSON'ed later on
         """
-        if itemStr is None
+        if not itemStr:
             return json.dumps(
                 {"error": True, "message": "Tried to eat nothing!"})
-        
+
         if itemStr not in self.inventory:
             s = "%s doesn't have a %s" % (self.uid, itemStr)
-            
+
             return json.dumps(
                 {"error": False, "message": s})
 
