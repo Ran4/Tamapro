@@ -8,6 +8,7 @@ from bottle import Bottle, route, run, template, request, static_file
 import constants as con
 from tamasimulation import TamaSimulation
 import item
+import shop
 
 class Server:
     def __init__(self, host, port):
@@ -19,7 +20,8 @@ class Server:
         self.dbname = "tamapro_database.db"
 
         self.simulations = {}
-
+        self.shop = shop.Shop()
+        
         self.loadFromDatabase(verbose=False)
 
         #Debug stuff
@@ -37,7 +39,7 @@ class Server:
         self.loadFromDatabase(verbose=True)
 
     def saveToDatabase(self, verbose=True):
-        """Saves all simulations to the database"""
+        """Saves all simulations and shops to the database"""
         conn = sqlite3.connect(self.dbname)
         c = conn.cursor()
         if verbose:
@@ -65,12 +67,14 @@ class Server:
         if verbose:
             print "  %s item entries from %s tamas inserted into database" % \
                     (numItems, len(self.simulations))
+                    
+        #TODO: save shops
 
         if verbose:
             print "Successfully saved everything to db!\n"
 
     def loadFromDatabase(self, verbose=True):
-        """Loads all simulations from the database"""
+        """Loads all simulations and shops from the database"""
         conn = sqlite3.connect(self.dbname)
         c = conn.cursor()
 
@@ -97,9 +101,9 @@ class Server:
             for _ in range(amount):
                 self.simulations[uid].inventory.add(itemName)
         """
-
-        if verbose:
-            print "Successfully loaded everything from db!\n"
+        
+        
+        #TODO: Load all the shop data
 
     def start(self):
         self.app.run(host=self.host, port=self.port)
@@ -299,6 +303,10 @@ class Server:
             print "their moods are %s and %s respectively" % \
                    (sim.mood, otherTama.mood)
             return response
+            
+        elif command == "getshopitems":
+            response = self.shop.getItemsJSON()
+            return response
 
         #Command wasn't handled if we are here
         return s + "Command %s wasn't handled." % command
@@ -345,17 +353,18 @@ class Server:
                 s += "%s is not a valid item!" % arg
                 return json.dumps({"error": True, "message": s})
 
-            response = sim.playWithItem(arg)
+            response = sim.playWithItemJSON(arg)
             print "DEBUG: After playing with the item %s," % arg,
             print "pet mood is now: %s" % sim.mood
             return response
 
         elif command == "playwithtama":
             if arg not in self.simulations:
-                return s + "Tried playing with uid=%s, which doesn't exist!" % \
-                        arg
+                s += "Tried playing with uid=%s, which doesn't exist!" % arg
+                return json.dumps({"error": True, "message": s})
+                
             otherTama = self.simulations[arg]
-            response = sim.playWithTama(otherTama)
+            response = sim.playWithTamaJSON(otherTama)
             print "DEBUG: After %s played with %s," % (sim.uid, otherTama.uid),
             print "their moods are %s and %s respectively" % \
                    (sim.mood, otherTama.mood)
@@ -380,6 +389,8 @@ class Server:
             return e.message
         except:
             return "error"
+            
+        self.shop.update()
 
         for sim in self.simulations.values():
             sim.updateSimulation(dt)

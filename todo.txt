@@ -10,11 +10,11 @@ Works on server but not in app:
 
 Not in server yet:
 [x?] Eat
-[] Play with item
-[] Play with friend
+[x] Play with item
+[x] Play with friend
 [] Buy item
 [] Add friend
-[] List all items (shop)
+[x] List all items (shop)
 
 
 Other:

@@ -6,6 +6,7 @@ PETTABLE = 8
 PLAYABLE = 16
 POISONOUS = 32
 HEALING = 64
+EXPENSIVE = 128
 
 #each value in the items dictionary corresponds to a property of the item
 items = {
@@ -37,6 +38,14 @@ def isPettable(itemName):
     if itemName not in items: return False
     return items[itemName] & PETTABLE
 
+def isPlayable(itemName):
+    if itemName not in items: return False
+    return items[itemName] & PLAYABLE
+    
 def isHealing(itemName):
     if itemName not in items: return False
     return items[itemName] & HEALING
+
+def isExpensive(itemName):
+    if itemName not in items: return False
+    return items[itemName] & EXPENSIVE

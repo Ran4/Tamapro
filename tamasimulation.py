@@ -84,7 +84,7 @@ class TamaSimulation(object):
     def addItemJSON(self, itemStr):
         self.inventory.append(itemStr)
         s = "%s now has a %s" % (self.uid, itemStr)
-        return json.dumps({"error": False, "message:", s})
+        return json.dumps({"error": False, "message": s})
 
     def eat(self, itemStr):
         if itemStr not in self.inventory:
@@ -112,7 +112,7 @@ class TamaSimulation(object):
         """Eats an item.
         Returns a dictionary to be JSON'ed later on
         """
-        if itemStr is None
+        if itemStr is None:
             return json.dumps(
                 {"error": True, "message": "Tried to eat nothing!"})
         
@@ -168,17 +168,34 @@ class TamaSimulation(object):
             self.mood += con.MOOD_INCREASE_IF_DISLIKE
 
         if not itemStr:
-            msg = "%s was petted!" % (self.uid)
-            return json.dumps({"error": False, "message": msg})
+            s = "%s was petted!" % (self.uid)
+            return json.dumps({"error": False, "message": s})
 
-        msg = "%s was petted with a %s!" % (self.uid, itemStr)
+        s = "%s was petted with a %s!" % (self.uid, itemStr)
 
         if item.hasProperty(itemStr, item.POISONOUS):
             if not self.sick: #only tell if we're not already sick
-                msg += " It sickened %s!" % self.uid
+                s += " It sickened %s!" % self.uid
             self.sick = True
 
-        return json.dumps({"error": False, "message": msg})
+        return json.dumps({"error": False, "message": s})
+        
+    def playWithItemJSON(self, itemStr):
+        if not itemStr:
+            s = "No item was given!"
+            return json.dumps({"error": True, "message": s})
+            
+        if item.isPlayable(itemStr):
+            s = "%s played with %s, becoming happier in the process!" % \
+                (self.uid, itemStr)
+            
+            self.changeMood(con.MOOD_INCREASE_IF_LIKE)
+            
+        else:
+            s = "%s doesn't want to play with %s..." % (self.uid, itemStr)
+        
+        return json.dumps({"error": False, "message": s})
+        
 
     def changeMood(self, amount):
         self.mood += amount
@@ -218,6 +235,40 @@ class TamaSimulation(object):
             self.knows[id2] = con.MAX_KNOWLEDGE_LEVEL
 
         return s
+        
+    def playWithTamaJSON(self, otherTama):
+        """Plays with another tama. This will change it's mood.
+        """
+        s = ""
+        id2 = otherTama.uid
+        if id2 not in self.knows:
+            self.knows[id2] = con.START_KNOWLEDGE_LEVEL
+            s += "%s just learned about %s!</br>" % (self.uid, otherTama.uid)
+
+        if self.knows[id2] < con.LIKE_LIMIT: #dislikes, will dislike more
+            self.knows[id2] += con.CHANGE_ON_DISLIKE
+            s += "%s now likes %s less...</br>" % (self.uid, otherTama.uid)
+        else:
+            self.knows[id2] += con.CHANGE_ON_LIKE
+            s += "%s now likes %s more!</br>" % (self.uid, otherTama.uid)
+
+        if self.knows[id2] > con.LOVE_LIMIT:
+            s += "%s loves %s!</br>" % (self.uid, otherTama.uid)
+            self.changeMood(con.MOOD_INCREASE_IF_LOVE)
+        elif self.knows[id2] >= con.LIKE_LIMIT:
+            self.changeMood(con.MOOD_INCREASE_IF_LIKE)
+        elif self.knows[id2] <= con.HATE_LIMIT:
+            s += "%s hates %s!</br>" % (self.uid, otherTama.uid)
+            self.changeMood(con.MOOD_INCREASE_IF_HATE)
+        else:
+            self.changeMood(con.MOOD_INCREASE_IF_DISLIKE)
+
+        if self.knows[id2] < 0:
+            self.knows[id2] = 0
+        elif self.knows[id2] > con.MAX_KNOWLEDGE_LEVEL:
+            self.knows[id2] = con.MAX_KNOWLEDGE_LEVEL
+
+        return json.dumps({"error": False, "message": s})
 
     def updateMood(self):
         if self.hunger > 50:
