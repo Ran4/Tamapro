@@ -80,6 +80,11 @@ class TamaSimulation(object):
     def addItem(self, itemStr):
         self.inventory.append(itemStr)
         return "%s now has a %s" % (self.uid, itemStr)
+        
+    def addItemJSON(self, itemStr):
+        self.inventory.append(itemStr)
+        s = "%s now has a %s" % (self.uid, itemStr)
+        return json.dumps({"error": False, "message:", s})
 
     def eat(self, itemStr):
         if itemStr not in self.inventory:
@@ -164,8 +169,7 @@ class TamaSimulation(object):
 
         if not itemStr:
             msg = "%s was petted!" % (self.uid)
-            jsonObj = {"error": False, "message": msg}
-            return jsonObj
+            return json.dumps({"error": False, "message": msg})
 
         msg = "%s was petted with a %s!" % (self.uid, itemStr)
 
@@ -174,7 +178,7 @@ class TamaSimulation(object):
                 msg += " It sickened %s!" % self.uid
             self.sick = True
 
-        return {"error": False, "message": msg}
+        return json.dumps({"error": False, "message": msg})
 
     def changeMood(self, amount):
         self.mood += amount
