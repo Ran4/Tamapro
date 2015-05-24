@@ -9,12 +9,12 @@ Works on server but not in app:
 
 
 Not in server yet:
-Eat
-Play with item
-Play with friend
-Buy item
-Add friend
-List all items (shop)
+[x?] Eat
+[] Play with item
+[] Play with friend
+[] Buy item
+[] Add friend
+[] List all items (shop)
 
 
 Other:

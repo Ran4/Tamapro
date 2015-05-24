@@ -304,6 +304,8 @@ class Server:
         return s + "Command %s wasn't handled." % command
 
     def handleCommandJSON(self, sim, command, arg):
+        s = ""
+        
         #Handle the commands!
         if command == "give":
             if arg not in item.items:
@@ -327,7 +329,7 @@ class Server:
             if arg not in item.items:
                 return s + "%s is not a valid item!" % arg
 
-            response = sim.eat(arg)
+            response = sim.eatJSON(arg)
             return response
 
         elif command == "pet":
