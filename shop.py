@@ -13,7 +13,10 @@ class Shop:
         self._populate()
 
     def _populate(self):
-        while len(self.itemAndCostDict) < 4:
+        """Makes sure that the shop contains
+        a certain number of items"""
+        numItemsWanted = min(con.NUM_ITEMS_IN_SHOP, len(item.items))
+        while len(self.itemAndCostDict) < numItemsWanted:
             self._addRandomItem()
     
     def getItemsNamesJSON(self):
@@ -27,7 +30,7 @@ class Shop:
 
     def update(self):
         self._removeRandomItem()
-        self._addRandomItem()
+        self._populate()
 
     def _removeRandomItem(self):
         if self.itemAndCostDict: #don't pop if it's empty

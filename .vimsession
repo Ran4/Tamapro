@@ -58,10 +58,10 @@ nnoremap ü ik$
 nnoremap ä /
 nnoremap ö /
 imap kl 
-iabbr false: False:
-iabbr true: True:
-iabbr pritn print
 iabbr adn and
+iabbr pritn print
+iabbr true: True:
+iabbr false: False:
 let &cpo=s:cpo_save
 unlet s:cpo_save
 set backspace=indent,eol,start
@@ -99,7 +99,7 @@ badd +1 startserver.py
 badd +1 todo.txt
 badd +1 init_queries.sql
 badd +20 initdatabase.py
-badd +0 shop.py
+badd +1 shop.py
 args server.py tamasimulation.py item.py
 edit server.py
 set splitbelow splitright
@@ -126,15 +126,15 @@ set nosplitright
 wincmd t
 set winheight=1 winwidth=1
 exe 'vert 1resize ' . ((&columns * 80 + 119) / 239)
-exe '2resize ' . ((&lines * 32 + 34) / 68)
+exe '2resize ' . ((&lines * 33 + 34) / 68)
 exe 'vert 2resize ' . ((&columns * 80 + 119) / 239)
-exe '3resize ' . ((&lines * 32 + 34) / 68)
+exe '3resize ' . ((&lines * 31 + 34) / 68)
 exe 'vert 3resize ' . ((&columns * 80 + 119) / 239)
 exe '4resize ' . ((&lines * 24 + 34) / 68)
 exe 'vert 4resize ' . ((&columns * 77 + 119) / 239)
-exe '5resize ' . ((&lines * 26 + 34) / 68)
+exe '5resize ' . ((&lines * 27 + 34) / 68)
 exe 'vert 5resize ' . ((&columns * 77 + 119) / 239)
-exe '6resize ' . ((&lines * 13 + 34) / 68)
+exe '6resize ' . ((&lines * 12 + 34) / 68)
 exe 'vert 6resize ' . ((&columns * 77 + 119) / 239)
 argglobal
 setlocal keymap=
@@ -238,12 +238,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 235 - ((0 * winheight(0) + 32) / 65)
+let s:l = 223 - ((0 * winheight(0) + 32) / 65)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-235
-normal! 04l
+223
+normal! 0
 wincmd w
 argglobal
 2argu
@@ -349,11 +349,11 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 10 - ((9 * winheight(0) + 16) / 32)
+let s:l = 19 - ((9 * winheight(0) + 16) / 33)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-10
+19
 normal! 0
 wincmd w
 argglobal
@@ -459,7 +459,7 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 146 - ((0 * winheight(0) + 16) / 32)
+let s:l = 146 - ((0 * winheight(0) + 15) / 31)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -680,7 +680,7 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 13) / 26)
+let s:l = 1 - ((0 * winheight(0) + 13) / 27)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -826,24 +826,23 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 6) / 13)
+let s:l = 1 - ((0 * winheight(0) + 6) / 12)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
 1
 normal! 0
 wincmd w
-2wincmd w
 exe 'vert 1resize ' . ((&columns * 80 + 119) / 239)
-exe '2resize ' . ((&lines * 32 + 34) / 68)
+exe '2resize ' . ((&lines * 33 + 34) / 68)
 exe 'vert 2resize ' . ((&columns * 80 + 119) / 239)
-exe '3resize ' . ((&lines * 32 + 34) / 68)
+exe '3resize ' . ((&lines * 31 + 34) / 68)
 exe 'vert 3resize ' . ((&columns * 80 + 119) / 239)
 exe '4resize ' . ((&lines * 24 + 34) / 68)
 exe 'vert 4resize ' . ((&columns * 77 + 119) / 239)
-exe '5resize ' . ((&lines * 26 + 34) / 68)
+exe '5resize ' . ((&lines * 27 + 34) / 68)
 exe 'vert 5resize ' . ((&columns * 77 + 119) / 239)
-exe '6resize ' . ((&lines * 13 + 34) / 68)
+exe '6resize ' . ((&lines * 12 + 34) / 68)
 exe 'vert 6resize ' . ((&columns * 77 + 119) / 239)
 tabedit todo.txt
 set splitbelow splitright
@@ -1101,7 +1100,6 @@ normal! zt
 normal! 0
 lcd ~/pyy/iprog/tamapro
 wincmd w
-2wincmd w
 exe 'vert 1resize ' . ((&columns * 118 + 119) / 239)
 exe 'vert 2resize ' . ((&columns * 120 + 119) / 239)
 tabnext 1

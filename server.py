@@ -309,7 +309,7 @@ class Server:
             return response
 
         elif command == "getshopitems":
-            response = self.shop.getItemsJSON()
+            response = self.shop.getItemsNamesJSON()
             return response
 
         #Command wasn't handled if we are here
