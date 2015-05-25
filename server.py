@@ -2,6 +2,8 @@ import sys
 import sqlite3
 import time
 import json
+from operator import attrgetter
+from operator import itemgetter
 
 from bottle import Bottle, route, run, template, request, static_file
 
@@ -30,8 +32,8 @@ class Server:
         sim = TamaSimulation(uid, pw)
         self.simulations[uid] = sim
 
-        sim.inventory.append("Child")
-        sim.inventory.append("Banana")
+        sim.inventory.append("child")
+        sim.inventory.append("banana")
 
         print "DEBUG: new sim was added, now saving to db"
         self.saveToDatabase(verbose=True)
@@ -122,7 +124,7 @@ class Server:
         r('/', callback=self.index)
         r('/addtama/<uid>/<password>', callback=self.createNewTama)
         r('/addtama/<uid>/<password>/', callback=self.createNewTama)
-        r('/json/showiteminfo/<itemStr>', callback=self.showItemInfo)
+        r('/json/showiteminfo/<itemStr>', callback=self.showItemInfoJSON)
         r('/json/listallitems', callback=self.listAllItems)
         r('/json/addtama/<uid>/<password>', callback=self.createNewTamaJSON)
         r('/json/addtama/<uid>/<password>/', callback=self.createNewTamaJSON)
@@ -384,17 +386,29 @@ class Server:
         s += "Command %s wasn't handled." % command
         return json.dumps({"error": True, "message": s})
 
-    def showItemInfo(self, itemStr):
+    def showItemInfoJSON(self, itemStr):
         if itemStr not in item.items:
-            return json.dumps({"error": True, "message": "Not a valid item."})
+            return json.dumps({"error": True,
+                "message": "Item %s doesn't exist!" % itemStr})
+        else:
+            return json.dumps("error":False, 
+                    "description:", item.items[itemStr]["description"]))
+    
+    def shopShowItemInfoJSON(self, itemStr):
+        if itemStr not in self.shop.itemAndCostDict:
+            return json.dumps({"error": True,
+                "message": "Item %s not in shop!" % itemStr})
+        else:
+            return json.dumps("error":False, 
+                    "description": item.items[itemStr]["description"],
+                    "price": self.shop.getPriceOfItem(itemStr)))
 
         response = {"error": False}
         response.update(item.items[itemStr])
         return json.dumps(response)
 
     def listAllItems(self):
-        response = {"error": False, "items": item.items.keys()}
-        return json.dumps(response)
+        return self.shop.getItemsNamesJSON()
 
     def showCommands(self, uid, password):
         s = "<a href='../../'>(Go back to stat page)</a></br>"
