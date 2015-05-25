@@ -70,6 +70,7 @@ class TamaSimulation(object):
 
     def getStatusJSON(self, formatForHTML=False):
         valueDict = dict(zip(self.getDBValueLabels(), self.getDBValues()))
+        valueDict.update({"error": False})
         s = json.dumps(valueDict, indent=4)
         if formatForHTML:
             s = s.replace("\n", "</br>\n").replace('"','').replace(":",": ")
@@ -179,23 +180,23 @@ class TamaSimulation(object):
             self.sick = True
 
         return json.dumps({"error": False, "message": s})
-        
+
     def playWithItemJSON(self, itemStr):
         if not itemStr:
             s = "No item was given!"
             return json.dumps({"error": True, "message": s})
-            
+
         if item.isPlayable(itemStr):
             s = "%s played with %s, becoming happier in the process!" % \
                 (self.uid, itemStr)
-            
+
             self.changeMood(con.MOOD_INCREASE_IF_LIKE)
-            
+
         else:
             s = "%s doesn't want to play with %s..." % (self.uid, itemStr)
-        
+
         return json.dumps({"error": False, "message": s})
-        
+
 
     def changeMood(self, amount):
         self.mood += amount
@@ -235,7 +236,7 @@ class TamaSimulation(object):
             self.knows[id2] = con.MAX_KNOWLEDGE_LEVEL
 
         return s
-        
+
     def playWithTamaJSON(self, otherTama):
         """Plays with another tama. This will change it's mood.
         """
