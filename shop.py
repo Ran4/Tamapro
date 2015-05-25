@@ -8,7 +8,6 @@ import item
 
 class Shop:
     def __init__(self):
-        self.itemAndCostList = []
         self.itemAndCostDict = {}
         self._populate()
 
@@ -39,9 +38,15 @@ class Shop:
             del self.itemAndCostDict[keyToRemove]
 
     def _addRandomItem(self):
+        """Adds a random item to the shop's item dictionary.
+        WARNING: Might overwrite previous item (and it's cost)
+        """
         itemStr = random.choice(item.items.keys())
-        cost = random.randint(4, 8)
+        a = con.SHOP_MIN_COST
+        b = con.SHOP_MAX_COST
+        
+        cost = random.randint(a, b) * con.SHOP_COST_MULTIPLIER
         if item.isExpensive(itemStr):
-            cost += 8
+            cost += con.SHOP_HIGHER_COST_OF_EXPENSIVE_ITEM
             
         self.itemAndCostDict[itemStr] = cost

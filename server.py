@@ -139,11 +139,6 @@ class Server:
         r('/updatesimulation/<dt>', callback=self.updateSimulation)
         r('/updatesimulation/<dt>/', callback=self.updateSimulation)
         r('/images/<imagepath:path>', callback=self.getImageRouting)
-        r('/<uid>/<password>', callback=self.showCommands)
-        r('/<uid>/<password>/', callback=self.showCommands)
-        r('/<uid>/<password>/<command>', callback=self.doAction)
-        r('/<uid>/<password>/<command>/', callback=self.doAction)
-        r('/<uid>/<password>/<command>/<arg>', callback=self.doAction)
 
     #############################################################
     # ROUTING
@@ -165,7 +160,10 @@ class Server:
         s += "<b>Simulations running:</b></br>"
         s += "\n".join(sb)
 
-        s += "<b>List of items:</b>\n</br>"
+        s += "<b>List of items in shop:</b>\n</br>"
+        s += "\n</br>".join(self.shop.itemAndCostDict.keys())
+        
+        s += "</br><b>List of all items:</b>\n</br>"
         s += "\n</br>".join(item.items.keys())
 
         return s
@@ -207,31 +205,6 @@ class Server:
         jsonObj = {"error": False, "message": "Success."}
         return json.dumps(jsonObj, indent=4, separators=(",", ": "))
 
-
-    def doAction(self, uid, password, command, arg=None):
-        sim = self.getSimFromUID(uid)
-        if not sim:
-            return "Couldn't find tama with uid {}".format(uid)
-
-        if sim.password and sim.password != password:
-            return "Wrong password for tama with uid {}".format(uid)
-
-        s = "Called doAction with uid <br>{}".format(uid)
-        s += "</br>and command=" + command
-        if arg:
-            s += "</br>and argument=%s" % arg
-        else:
-            s += "</br>but no argument"
-        s += "<br>----------</br>"
-
-        #Make sure that the command exists and that it has args if needed
-        if command not in con.commandList:
-            return s + "Unknown command!"
-        elif command in con.requiresArguments and arg is None:
-            return s + "The %s command is missing an argument" % command
-
-        return self.handleCommand(s, sim, command, arg)
-
     def doActionJSON(self, uid, password, command, arg=None):
         sim = self.getSimFromUID(uid)
         if not sim:
@@ -255,68 +228,6 @@ class Server:
             return json.dumps(jsonObj, indent=4, separators=(",", ": "))
 
         return self.handleCommandJSON(sim, command, arg)
-
-    def handleCommand(self, s, sim, command, arg):
-        #Handle the commands!
-        if command == "give":
-            if arg not in item.items:
-                return s + "%s is not a valid item!" % arg
-
-            return s + sim.addItem(arg)
-
-        elif command == "inventory":
-            #returns item
-            return "\n".join(sim.inventory)
-
-        elif command == "getimage":
-            fileName = sim.getImageFileName()
-            print "Serving image with path %s" % fileName
-            return static_file(fileName, root='')
-
-        elif command == "status":
-            return sim.getStatusJSON()
-
-        elif command == "statushtml":
-            return sim.getStatusJSON(formatForHTML=True)
-
-        elif command == "eat":
-            if arg not in item.items:
-                return s + "%s is not a valid item!" % arg
-
-            response = sim.eat(arg)
-            return response
-
-        elif command == "pet":
-            response = sim.pet(arg)
-            print "DEBUG: After petting, pet mood is now: %s" % sim.mood
-            return response
-
-        elif command == "playwithitem":
-            if arg not in item.items:
-                return s + "%s is not a valid item!" % arg
-
-            response = sim.playWithItem(arg)
-            print "DEBUG: After playing with the item %s," % arg,
-            print "pet mood is now: %s" % sim.mood
-            return response
-
-        elif command == "playwithtama":
-            if arg not in self.simulations:
-                return s + "Tried playing with uid=%s, which doesn't exist!" % \
-                        arg
-            otherTama = self.simulations[arg]
-            response = sim.playWithTama(otherTama)
-            print "DEBUG: After %s played with %s," % (sim.uid, otherTama.uid),
-            print "their moods are %s and %s respectively" % \
-                   (sim.mood, otherTama.mood)
-            return response
-
-        elif command == "getshopitems":
-            response = self.shop.getItemsNamesJSON()
-            return response
-
-        #Command wasn't handled if we are here
-        return s + "Command %s wasn't handled." % command
 
     def handleCommandJSON(self, sim, command, arg):
         s = ""
@@ -386,6 +297,9 @@ class Server:
 
         elif command == "buyitem":
             return sim.buyItem(arg, self.shop)
+        
+        elif command == "commands":
+            return self.showCommands()
 
         #Command wasn't handled if we are here
         s += "Command %s wasn't handled." % command
@@ -415,7 +329,8 @@ class Server:
     def listAllItemsInShop(self):
         return self.shop.getItemsNamesJSON()
 
-    def showCommands(self, uid, password):
+    def showCommands(self):
+        """Used for debug only: returns an HTML page"""
         s = "<a href='../../'>(Go back to stat page)</a></br>"
         s += "Commands:</br>"
         for command in con.commandList:

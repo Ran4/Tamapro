@@ -1,6 +1,6 @@
 commandList = ["eat", "pet", "playwithitem", "playwithtama", "give",
-    "inventory", "getimage", "status", "statushtml", "getshopitems",
-    "getmoney", "buyitem"]
+    "inventory", "getimage", "status", "getshopitems", "getmoney", "buyitem",
+    "statushtml", "commands"]
 requiresArguments = ["eat", "give",
     "playwithitem", "playwithtama", "buyitem"]
 
@@ -27,5 +27,10 @@ MOOD_INCREASE_IF_DISLIKE = -3
 MOOD_CHANGE_ON_HIGH_HUNGER = -5
 MOOD_CHANGE_ON_MEDIUM_HUNGER = -3
 
-
+##############################
+#Store stuff
 NUM_ITEMS_IN_SHOP = 4
+SHOP_MIN_COST = 1
+SHOP_MAX_COST = 4
+SHOP_COST_MULTIPLIER = 10
+SHOP_HIGHER_COST_OF_EXPENSIVE_ITEM = 40 #multiplier is not applied
