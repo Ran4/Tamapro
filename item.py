@@ -10,42 +10,42 @@ EXPENSIVE = 128
 
 #each value in the items dictionary corresponds to a property of the item
 items = {
-    "banana": EDIBLE | PETTABLE,
-    "orange": EDIBLE,
-    "child": EDIBLE | TASTY,
-    "tire": PLAYABLE,
-    "rotten apple": EDIBLE | POISONOUS,
-    "rusty nail": PLAYABLE | POISONOUS,
-    "medicine": EDIBLE | HEALING,
-    "golden apple": EDIBLE | HEALING,
-    "book": PLAYABLE,
+    "banana": {"properties": EDIBLE | PETTABLE, "description": "A yellow banana.", "price": 1},
+    "orange": {"properties": EDIBLE, "description": "A juicy orange.", "price": 2},
+    "child": {"properties": EDIBLE | TASTY, "description": "A tasty child.", "price": 10},
+    "tire": {"properties": PLAYABLE, "description": "A fun round tire.", "price": 15},
+    "rotten apple": {"properties": EDIBLE | POISONOUS, "description": "A rotten apple. Yuck!", "price": 5},
+    "rusty nail": {"properties": PLAYABLE | POISONOUS, "description": "A pointy nail covered with rust.", "price": 20},
+    "medicine": {"properties": EDIBLE | HEALING, "description": "A small white pill.", "price": 25},
+    "golden apple": {"properties": EDIBLE | HEALING, "description": "A golden apple. It looks valuable.", "price": 50},
+    "book": {"properties": PLAYABLE, "description": "An old dusty book.", "price": 25},
 }
 
 def hasProperty(itemName, prop):
     if itemName not in items:
         return False
-    return items[itemName] & prop
+    return items[itemName]["properties"] & prop
 
 def isEdible(itemName):
     if itemName not in items: return False
-    return items[itemName] & EDIBLE
+    return items[itemName]["properties"] & EDIBLE
 
 def isTasty(itemName):
     if itemName not in items: return False
-    return items[itemName] & TASTY
+    return items[itemName]["properties"] & TASTY
 
 def isPettable(itemName):
     if itemName not in items: return False
-    return items[itemName] & PETTABLE
+    return items[itemName]["properties"] & PETTABLE
 
 def isPlayable(itemName):
     if itemName not in items: return False
-    return items[itemName] & PLAYABLE
-    
+    return items[itemName]["properties"] & PLAYABLE
+
 def isHealing(itemName):
     if itemName not in items: return False
-    return items[itemName] & HEALING
+    return items[itemName]["properties"] & HEALING
 
 def isExpensive(itemName):
     if itemName not in items: return False
-    return items[itemName] & EXPENSIVE
+    return items[itemName]["properties"] & EXPENSIVE

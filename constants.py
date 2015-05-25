@@ -1,5 +1,6 @@
 commandList = ["eat", "pet", "playwithitem", "playwithtama", "give",
-    "inventory", "getimage", "status", "statushtml", "getshopitems"]
+    "inventory", "getimage", "status", "statushtml", "getshopitems",
+    "getmoney"]
 requiresArguments = ["eat", "give",
     "playwithitem", "playwithtama"]
 

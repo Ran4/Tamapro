@@ -21,7 +21,7 @@ class Server:
 
         self.simulations = {}
         self.shop = shop.Shop()
-        
+
         self.loadFromDatabase(verbose=False)
 
         #Debug stuff
@@ -67,7 +67,7 @@ class Server:
         if verbose:
             print "  %s item entries from %s tamas inserted into database" % \
                     (numItems, len(self.simulations))
-                    
+
         #TODO: save shops
 
         if verbose:
@@ -101,8 +101,8 @@ class Server:
             for _ in range(amount):
                 self.simulations[uid].inventory.add(itemName)
         """
-        
-        
+
+
         #TODO: Load all the shop data
 
     def start(self):
@@ -122,6 +122,7 @@ class Server:
         r('/', callback=self.index)
         r('/addtama/<uid>/<password>', callback=self.createNewTama)
         r('/addtama/<uid>/<password>/', callback=self.createNewTama)
+        r('/json/showiteminfo/<itemStr>', callback=self.showItemInfo);
         r('/json/addtama/<uid>/<password>', callback=self.createNewTamaJSON)
         r('/json/addtama/<uid>/<password>/', callback=self.createNewTamaJSON)
         r('/json/<uid>/<password>', callback=self.login)
@@ -303,7 +304,7 @@ class Server:
             print "their moods are %s and %s respectively" % \
                    (sim.mood, otherTama.mood)
             return response
-            
+
         elif command == "getshopitems":
             response = self.shop.getItemsJSON()
             return response
@@ -313,7 +314,7 @@ class Server:
 
     def handleCommandJSON(self, sim, command, arg):
         s = ""
-        
+
         #Handle the commands!
         if command == "give":
             if arg not in item.items:
@@ -326,7 +327,7 @@ class Server:
         elif command == "inventory":
             #returns item
             return {"error": False, "items": sim.inventory}
-            
+
         elif command == "getimage":
             fileName = sim.getImageFileName()
             print "Serving image with path %s" % fileName
@@ -362,7 +363,7 @@ class Server:
             if arg not in self.simulations:
                 s += "Tried playing with uid=%s, which doesn't exist!" % arg
                 return json.dumps({"error": True, "message": s})
-                
+
             otherTama = self.simulations[arg]
             response = sim.playWithTamaJSON(otherTama)
             print "DEBUG: After %s played with %s," % (sim.uid, otherTama.uid),
@@ -370,9 +371,25 @@ class Server:
                    (sim.mood, otherTama.mood)
             return response
 
+        elif command == "getshopitems":
+            response = self.shop.getItemsJSON()
+            return response
+
+        elif command == "getmoney":
+            return json.dumps({"error": False, "money": sim.money})
+
+
         #Command wasn't handled if we are here
         s += "Command %s wasn't handled." % command
         return json.dumps({"error": True, "message": s})
+
+    def showItemInfo(self, itemStr):
+        if itemStr not in item.items:
+            return json.dumps({"error": True, "message": "Not a valid item."})
+
+        response = {"error": False}
+        response.update(item.items[itemStr])
+        return json.dumps(response)
 
     def showCommands(self, uid, password):
         s = "<a href='../../'>(Go back to stat page)</a></br>"
@@ -389,7 +406,7 @@ class Server:
             return e.message
         except:
             return "error"
-            
+
         self.shop.update()
 
         for sim in self.simulations.values():
