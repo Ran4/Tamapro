@@ -25,6 +25,14 @@ Eating items / Petting with items should consume them.
 (Bonus, if we have time) Change the way the server is updated, remove routing /updatesimulation/<dt>
 
 
+
+JSON:
+
+shopShowItemInfoJSON
+{"price": 1, "description": "A yellow banana.", "properties": 9, "error": false}
+# properties används inte i appen så den är "optional"
+
+
 # OLD STUFF!
 Android-delen:
 - Kolla hur man gör http-requests med Android
