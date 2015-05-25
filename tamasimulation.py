@@ -272,7 +272,7 @@ class TamaSimulation(object):
         else:
             pass
 
-    def buyItem(self, itemStr, shopObject):
+    def buyItem(self, shopObject, itemStr):
         if itemStr not in shopObject.itemAndCostDict:
             return json.dumps({"error": True,
                 "message": "Item %s isn't in the shop!" % itemStr})
