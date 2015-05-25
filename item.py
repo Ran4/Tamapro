@@ -17,7 +17,7 @@ items = {
     "rotten apple": {"properties": EDIBLE | POISONOUS, "description": "A rotten apple. Yuck!"},
     "rusty nail": {"properties": PLAYABLE | POISONOUS, "description": "A pointy nail covered with rust."},
     "medicine": {"properties": EDIBLE | HEALING, "description": "A small white pill."},
-    "golden apple": {"properties": EDIBLE | HEALING, "description": "A golden apple. It looks valuable."},
+    "golden apple": {"properties": EDIBLE | HEALING | EXPENSIVE, "description": "A golden apple. It looks valuable."},
     "book": {"properties": PLAYABLE, "description": "An old dusty book."},
 }
 
@@ -41,6 +41,10 @@ def isPettable(itemName):
 def isPlayable(itemName):
     if itemName not in items: return False
     return items[itemName]["properties"] & PLAYABLE
+
+def isPoisonous(itemName):
+    if itemName not in items: return False
+    return items[itemName]["properties"] & POISONOUS
 
 def isHealing(itemName):
     if itemName not in items: return False

@@ -97,7 +97,7 @@ class TamaSimulation(object):
 
         s = "%s ate a %s!" % (self.uid, itemStr)
 
-        if item.hasProperty(itemStr, item.POISONOUS):
+        if item.isPoisonous(itemStr):
             if not self.sick: #only tell if we're not already sick
                 s += " It sickened %s!" % self.uid
 
