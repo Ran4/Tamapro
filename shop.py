@@ -20,7 +20,8 @@ class Shop:
             self._addRandomItem()
     
     def getItemsNamesJSON(self):
-        json.dumps({"error": False, "items": self.itemAndCostDict.keys()})
+        return json.dumps({"error": False, 
+            "items": self.itemAndCostDict.keys()})
         
     def getPriceOfItem(self, itemStr):
         if itemStr not in self.itemAndCostDict:

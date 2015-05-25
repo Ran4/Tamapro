@@ -382,7 +382,9 @@ class Server:
 
         elif command == "getmoney":
             return json.dumps({"error": False, "money": sim.money})
-
+        
+        elif command == "buyitem":
+            return sim.buyItem(self.shop)
 
         #Command wasn't handled if we are here
         s += "Command %s wasn't handled." % command

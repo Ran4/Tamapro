@@ -1,6 +1,7 @@
 import json
 
 import item
+import shop
 import constants as con
 
 class TamaSimulation(object):
@@ -270,6 +271,23 @@ class TamaSimulation(object):
             pass
         else:
             pass
+        
+    def buyItem(self, shopObject, itemStr):
+        if itemStr not in shopObject.itemAndCostDict:
+            return json.dumps({"error": True,
+                "message": "Item %s isn't in the shop!" % itemStr})
+        itemCost = shopObject.itemAndCostDict[itemStr]
+        if self.money >= itemCost:
+            self.money -= itemCost
+            self.inventory.append(itemStr)
+            del shopObject.itemAndCostDict[itemStr]
+            
+            s = "%s bought a %s for $%s" % (self.uid, itemCost)
+            return json.dumps({"error": False, "message": s})
+        else:
+            s = "%s only have $%s, but the %s costs $%s!" % \
+                    (self.uid, itemStr, itemCost)
+            return json.dumps({"error": True, "message": s})
 
     def updateSimulation(self, dt):
         dtMinutes = dt / 60.0
