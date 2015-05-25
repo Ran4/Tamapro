@@ -53,7 +53,7 @@ class TamaSimulation(object):
         pass
 
     def possessiveName(self):
-        if self.uid.endswith("s","z"):
+        if self.uid.endswith("s") or self.uid.endswith("z"):
             return self.uid + "'"
         else:
             return self.uid + "'s"
@@ -259,7 +259,7 @@ class TamaSimulation(object):
             return json.dumps({"error": False, "message": s})
         else:
             s = "%s only have $%s, but the %s costs $%s!" % \
-                    (self.uid, itemStr, itemCost)
+                    (self.uid, self.money, itemStr, itemCost)
             return json.dumps({"error": True, "message": s})
 
     def updateSimulation(self, dt):
