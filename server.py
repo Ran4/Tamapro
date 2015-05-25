@@ -136,6 +136,7 @@ class Server:
     def getSimFromUID(self, uid):
         """Returns a certain simulation, or None if no simulation was found
         """
+        print "in getSimFromUID, simulations:", str(self.simulations)
         if uid in self.simulations:
             return self.simulations[uid]
         else:
@@ -366,8 +367,7 @@ class Server:
         for sim in self.simulations.values():
             sim.updateSimulation(dt)
 
-        print "TODO: MAKE SUER TO SAVETODATABASE"
-        #self.saveToDatabase(verbose=True)
+        self.saveToDatabase(verbose=True)
         return "Successfully ran updateSimulation"
 
     #Simulation stuff
