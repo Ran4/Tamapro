@@ -393,15 +393,15 @@ class Server:
             return json.dumps({"error": True,
                 "message": "Item %s doesn't exist!" % itemStr})
         else:
-            return json.dumps({"error": False, 
-                    "description": itef.items[itemStr]["description"]})
-    
+            return json.dumps({"error": False,
+                    "description": item.items[itemStr]["description"]})
+
     def shopShowItemInfoJSON(self, itemStr):
         if itemStr not in self.shop.itemAndCostDict:
             return json.dumps({"error": True,
                 "message": "Item %s not in shop!" % itemStr})
         else:
-            return json.dumps({"error": False, 
+            return json.dumps({"error": False,
                     "description": item.items[itemStr]["description"],
                     "price": self.shop.getPriceOfItem(itemStr)})
 
