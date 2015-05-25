@@ -29,6 +29,7 @@ class Server:
         self.simulations["debuguid"].addItemJSON("child")
         self.simulations["debuguid"].addItemJSON("banana")
         self.createNewTamaJSON("debuguid2", "debugpw2")
+        self.simulations["debuguid"].addFriend("debuguid2")
         
         self.saveToDatabase(verbose=2)
         
@@ -74,6 +75,11 @@ class Server:
             itemDBValues = sim.getInventoryDBValues()
             c.executemany("INSERT INTO has VALUES (?,?,?)", itemDBValues)
             numItems += len(itemDBValues)
+           
+            #add tama relationships
+            for uid2, level in sim.knows.items():
+                c.execute("INSERT INTO knows VALUES (?, ?, ?)", 
+                        (sim.uid, uid2, level))
 
         if verbose:
             print "  %s item entries from %s tamas inserted into database" % \
@@ -114,7 +120,7 @@ class Server:
         #Load up all items to all tamas
         c.execute("SELECT * FROM has")
         hasList = c.fetchall()
-        if verbose: print "SELECT answer:", hasList
+        if verbose: print "has SELECT answer:", hasList
         for has in hasList:
             uid, name, amount = has
             for _ in range(amount):
@@ -123,9 +129,9 @@ class Server:
         #Load up all relationships
         c.execute("SELECT * FROM knows")
         knowsList = c.fetchall()
-        if verbose: print "SELECT answer:", knowsList
+        if verbose: print "knows SELECT answer:", knowsList
         for knows in knowsList:
-            print "knows:", know
+            print "knows:", knows
             #uid, name, amount = knows
 
         #TODO: Load all the shop data
