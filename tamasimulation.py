@@ -151,7 +151,7 @@ class TamaSimulation(object):
                 self.changeMood(con.MOOD_INCREASE_IF_LOVE)
             else:
                 self.changeMood(con.MOOD_INCREASE_IF_DISLIKE)
-
+        
         if itemStr is None: #Was petted without an item
             s = "%s was petted!" % (self.uid)
             return json.dumps({"error": False, "message": s,
@@ -162,10 +162,10 @@ class TamaSimulation(object):
             return json.dumps({"error": True, "message": s})
 
         s = "%s was petted with a %s!" % (self.uid, itemStr)
-        if item.isPettable(itemStr):
-            s += "\nIt liked it"
+        if item.isPettable(itemStr): 
+            s += "\nIt liked it" 
         else:
-            s += "\nIt didn't like it"
+            s += "\nIt didn't like it" 
         s += "\nNew mood: %s" % self.mood
 
         if item.hasProperty(itemStr, item.POISONOUS):
@@ -203,7 +203,7 @@ class TamaSimulation(object):
     def addFriend(self, uid2):
         self.knows[uid2] = 0
         s = "%s now knows %s!" % (self.uid, uid2)
-        return json.dumps({"error":False, s})
+        return json.dumps({"error":False, "message": s})
 
     def playWithTamaJSON(self, otherTama):
         """Plays with another tama. This will change it's mood.
@@ -244,7 +244,7 @@ class TamaSimulation(object):
             pass
         else:
             pass
-
+        
     def buyItem(self, shopObject, itemStr):
         if itemStr not in shopObject.itemAndCostDict:
             return json.dumps({"error": True,
@@ -254,8 +254,8 @@ class TamaSimulation(object):
             self.money -= itemCost
             self.inventory.append(itemStr)
             del shopObject.itemAndCostDict[itemStr]
-
-            s = "%s bought a %s for $%s" % (self.uid, itemStr, itemCost)
+            
+            s = "%s bought a %s for $%s" % (self.uid, itemCost)
             return json.dumps({"error": False, "message": s})
         else:
             s = "%s only have $%s, but the %s costs $%s!" % \
