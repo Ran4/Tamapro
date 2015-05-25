@@ -139,8 +139,6 @@ class Server:
         r('/updatesimulation/<dt>', callback=self.updateSimulation)
         r('/updatesimulation/<dt>/', callback=self.updateSimulation)
         r('/images/<imagepath:path>', callback=self.getImageRouting)
-        r('/<uid>/<password>', callback=self.showCommands)
-        r('/<uid>/<password>/', callback=self.showCommands)
 
     #############################################################
     # ROUTING
@@ -299,6 +297,9 @@ class Server:
 
         elif command == "buyitem":
             return sim.buyItem(arg, self.shop)
+        
+        elif command == "commands":
+            return self.showCommands()
 
         #Command wasn't handled if we are here
         s += "Command %s wasn't handled." % command
@@ -328,7 +329,8 @@ class Server:
     def listAllItemsInShop(self):
         return self.shop.getItemsNamesJSON()
 
-    def showCommands(self, uid, password):
+    def showCommands(self):
+        """Used for debug only: returns an HTML page"""
         s = "<a href='../../'>(Go back to stat page)</a></br>"
         s += "Commands:</br>"
         for command in con.commandList:
