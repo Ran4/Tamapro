@@ -58,10 +58,10 @@ nnoremap ü ik$
 nnoremap ä /
 nnoremap ö /
 imap kl 
-iabbr adn and
-iabbr pritn print
-iabbr true: True:
 iabbr false: False:
+iabbr true: True:
+iabbr pritn print
+iabbr adn and
 let &cpo=s:cpo_save
 unlet s:cpo_save
 set backspace=indent,eol,start
@@ -93,13 +93,13 @@ endif
 set shortmess=aoO
 badd +1 server.py
 badd +1 tamasimulation.py
-badd +2 item.py
-badd +1 constants.py
+badd +1 item.py
+badd +4 constants.py
 badd +1 startserver.py
 badd +1 todo.txt
 badd +1 init_queries.sql
 badd +20 initdatabase.py
-badd +1 shop.py
+badd +20 shop.py
 args server.py tamasimulation.py item.py
 edit server.py
 set splitbelow splitright
@@ -109,33 +109,14 @@ wincmd _ | wincmd |
 vsplit
 2wincmd h
 wincmd w
-wincmd _ | wincmd |
-split
-1wincmd k
-wincmd w
-wincmd w
-wincmd _ | wincmd |
-split
-wincmd _ | wincmd |
-split
-2wincmd k
-wincmd w
 wincmd w
 set nosplitbelow
 set nosplitright
 wincmd t
 set winheight=1 winwidth=1
 exe 'vert 1resize ' . ((&columns * 80 + 119) / 239)
-exe '2resize ' . ((&lines * 33 + 34) / 68)
 exe 'vert 2resize ' . ((&columns * 80 + 119) / 239)
-exe '3resize ' . ((&lines * 31 + 34) / 68)
-exe 'vert 3resize ' . ((&columns * 80 + 119) / 239)
-exe '4resize ' . ((&lines * 24 + 34) / 68)
-exe 'vert 4resize ' . ((&columns * 77 + 119) / 239)
-exe '5resize ' . ((&lines * 27 + 34) / 68)
-exe 'vert 5resize ' . ((&columns * 77 + 119) / 239)
-exe '6resize ' . ((&lines * 12 + 34) / 68)
-exe 'vert 6resize ' . ((&columns * 77 + 119) / 239)
+exe 'vert 3resize ' . ((&columns * 77 + 119) / 239)
 argglobal
 setlocal keymap=
 setlocal noarabic
@@ -238,15 +219,125 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 223 - ((0 * winheight(0) + 32) / 65)
+let s:l = 370 - ((0 * winheight(0) + 32) / 65)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-223
-normal! 0
+370
+normal! 035l
 wincmd w
 argglobal
 2argu
+setlocal keymap=
+setlocal noarabic
+setlocal autoindent
+setlocal balloonexpr=
+setlocal nobinary
+setlocal bufhidden=
+setlocal buflisted
+setlocal buftype=
+setlocal nocindent
+setlocal cinkeys=0{,0},0),:,!^F,o,O,e
+setlocal cinoptions=
+setlocal cinwords=if,else,while,do,for,switch
+setlocal colorcolumn=
+setlocal comments=s1:/*,mb:*,ex:*/,://,b:#,:XCOMM,n:>,fb:-
+setlocal commentstring=#%s
+setlocal complete=.,w,b,u,t,i
+setlocal concealcursor=
+setlocal conceallevel=0
+setlocal completefunc=
+setlocal nocopyindent
+setlocal cryptmethod=
+setlocal nocursorbind
+setlocal nocursorcolumn
+setlocal nocursorline
+setlocal define=
+setlocal dictionary=
+setlocal nodiff
+setlocal equalprg=
+setlocal errorformat=
+setlocal expandtab
+if &filetype != 'python'
+setlocal filetype=python
+endif
+setlocal foldcolumn=0
+setlocal foldenable
+setlocal foldexpr=0
+setlocal foldignore=#
+setlocal foldlevel=0
+setlocal foldmarker={{{,}}}
+setlocal foldmethod=manual
+setlocal foldminlines=1
+setlocal foldnestmax=20
+setlocal foldtext=foldtext()
+setlocal formatexpr=
+setlocal formatoptions=tcq
+setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
+setlocal grepprg=
+setlocal iminsert=2
+setlocal imsearch=2
+setlocal include=^\\s*\\(from\\|import\\)
+setlocal includeexpr=substitute(v:fname,'\\.','/','g')
+setlocal indentexpr=GetPythonIndent(v:lnum)
+setlocal indentkeys=0{,0},:,!^F,o,O,e,<:>,=elif,=except
+setlocal noinfercase
+setlocal iskeyword=@,48-57,_,192-255
+setlocal keywordprg=pydoc
+setlocal nolinebreak
+setlocal nolisp
+setlocal nolist
+setlocal makeprg=
+setlocal matchpairs=(:),{:},[:]
+setlocal nomodeline
+setlocal modifiable
+setlocal nrformats=octal,hex
+setlocal nonumber
+setlocal numberwidth=4
+setlocal omnifunc=pythoncomplete#Complete
+setlocal path=
+setlocal nopreserveindent
+setlocal nopreviewwindow
+setlocal quoteescape=\\
+setlocal noreadonly
+setlocal norelativenumber
+setlocal norightleft
+setlocal rightleftcmd=search
+setlocal noscrollbind
+setlocal shiftwidth=4
+setlocal noshortname
+setlocal nosmartindent
+setlocal softtabstop=4
+setlocal nospell
+setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
+setlocal spellfile=
+setlocal spelllang=en
+setlocal statusline=
+setlocal suffixesadd=.py
+setlocal swapfile
+setlocal synmaxcol=3000
+if &syntax != 'python'
+setlocal syntax=python
+endif
+setlocal tabstop=8
+setlocal tags=
+setlocal textwidth=0
+setlocal thesaurus=
+setlocal noundofile
+setlocal nowinfixheight
+setlocal nowinfixwidth
+setlocal wrap
+setlocal wrapmargin=0
+silent! normal! zE
+let s:l = 275 - ((31 * winheight(0) + 32) / 65)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+275
+normal! 08l
+wincmd w
+argglobal
+3argu
 edit shop.py
 setlocal keymap=
 setlocal noarabic
@@ -349,15 +440,39 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 19 - ((9 * winheight(0) + 16) / 33)
+let s:l = 1 - ((0 * winheight(0) + 32) / 65)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-19
+1
 normal! 0
 wincmd w
+2wincmd w
+exe 'vert 1resize ' . ((&columns * 80 + 119) / 239)
+exe 'vert 2resize ' . ((&columns * 80 + 119) / 239)
+exe 'vert 3resize ' . ((&columns * 77 + 119) / 239)
+tabedit item.py
+set splitbelow splitright
+wincmd _ | wincmd |
+split
+1wincmd k
+wincmd _ | wincmd |
+vsplit
+1wincmd h
+wincmd w
+wincmd w
+set nosplitbelow
+set nosplitright
+wincmd t
+set winheight=1 winwidth=1
+exe '1resize ' . ((&lines * 52 + 34) / 68)
+exe 'vert 1resize ' . ((&columns * 119 + 119) / 239)
+exe '2resize ' . ((&lines * 52 + 34) / 68)
+exe 'vert 2resize ' . ((&columns * 119 + 119) / 239)
+exe '3resize ' . ((&lines * 12 + 34) / 68)
 argglobal
-2argu
+1argu
+edit item.py
 setlocal keymap=
 setlocal noarabic
 setlocal autoindent
@@ -459,15 +574,15 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 146 - ((0 * winheight(0) + 15) / 31)
+let s:l = 4 - ((3 * winheight(0) + 26) / 52)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-146
-normal! 031l
+4
+normal! 0
 wincmd w
 argglobal
-3argu
+1argu
 edit constants.py
 setlocal keymap=
 setlocal noarabic
@@ -570,117 +685,7 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 4 - ((0 * winheight(0) + 12) / 24)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-4
-normal! 0
-wincmd w
-argglobal
-3argu
-setlocal keymap=
-setlocal noarabic
-setlocal autoindent
-setlocal balloonexpr=
-setlocal nobinary
-setlocal bufhidden=
-setlocal buflisted
-setlocal buftype=
-setlocal nocindent
-setlocal cinkeys=0{,0},0),:,!^F,o,O,e
-setlocal cinoptions=
-setlocal cinwords=if,else,while,do,for,switch
-setlocal colorcolumn=
-setlocal comments=s1:/*,mb:*,ex:*/,://,b:#,:XCOMM,n:>,fb:-
-setlocal commentstring=#%s
-setlocal complete=.,w,b,u,t,i
-setlocal concealcursor=
-setlocal conceallevel=0
-setlocal completefunc=
-setlocal nocopyindent
-setlocal cryptmethod=
-setlocal nocursorbind
-setlocal nocursorcolumn
-setlocal nocursorline
-setlocal define=
-setlocal dictionary=
-setlocal nodiff
-setlocal equalprg=
-setlocal errorformat=
-setlocal expandtab
-if &filetype != 'python'
-setlocal filetype=python
-endif
-setlocal foldcolumn=0
-setlocal foldenable
-setlocal foldexpr=0
-setlocal foldignore=#
-setlocal foldlevel=0
-setlocal foldmarker={{{,}}}
-setlocal foldmethod=manual
-setlocal foldminlines=1
-setlocal foldnestmax=20
-setlocal foldtext=foldtext()
-setlocal formatexpr=
-setlocal formatoptions=tcq
-setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
-setlocal grepprg=
-setlocal iminsert=2
-setlocal imsearch=2
-setlocal include=^\\s*\\(from\\|import\\)
-setlocal includeexpr=substitute(v:fname,'\\.','/','g')
-setlocal indentexpr=GetPythonIndent(v:lnum)
-setlocal indentkeys=0{,0},:,!^F,o,O,e,<:>,=elif,=except
-setlocal noinfercase
-setlocal iskeyword=@,48-57,_,192-255
-setlocal keywordprg=pydoc
-setlocal nolinebreak
-setlocal nolisp
-setlocal nolist
-setlocal makeprg=
-setlocal matchpairs=(:),{:},[:]
-setlocal nomodeline
-setlocal modifiable
-setlocal nrformats=octal,hex
-setlocal nonumber
-setlocal numberwidth=4
-setlocal omnifunc=pythoncomplete#Complete
-setlocal path=
-setlocal nopreserveindent
-setlocal nopreviewwindow
-setlocal quoteescape=\\
-setlocal noreadonly
-setlocal norelativenumber
-setlocal norightleft
-setlocal rightleftcmd=search
-setlocal noscrollbind
-setlocal shiftwidth=4
-setlocal noshortname
-setlocal nosmartindent
-setlocal softtabstop=4
-setlocal nospell
-setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
-setlocal spellfile=
-setlocal spelllang=en
-setlocal statusline=
-setlocal suffixesadd=.py
-setlocal swapfile
-setlocal synmaxcol=3000
-if &syntax != 'python'
-setlocal syntax=python
-endif
-setlocal tabstop=8
-setlocal tags=
-setlocal textwidth=0
-setlocal thesaurus=
-setlocal noundofile
-setlocal nowinfixheight
-setlocal nowinfixwidth
-setlocal wrap
-setlocal wrapmargin=0
-silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 13) / 27)
+let s:l = 1 - ((0 * winheight(0) + 26) / 52)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -688,7 +693,7 @@ normal! zt
 normal! 0
 wincmd w
 argglobal
-3argu
+1argu
 edit init_queries.sql
 let s:cpo_save=&cpo
 set cpo&vim
@@ -833,17 +838,12 @@ normal! zt
 1
 normal! 0
 wincmd w
-exe 'vert 1resize ' . ((&columns * 80 + 119) / 239)
-exe '2resize ' . ((&lines * 33 + 34) / 68)
-exe 'vert 2resize ' . ((&columns * 80 + 119) / 239)
-exe '3resize ' . ((&lines * 31 + 34) / 68)
-exe 'vert 3resize ' . ((&columns * 80 + 119) / 239)
-exe '4resize ' . ((&lines * 24 + 34) / 68)
-exe 'vert 4resize ' . ((&columns * 77 + 119) / 239)
-exe '5resize ' . ((&lines * 27 + 34) / 68)
-exe 'vert 5resize ' . ((&columns * 77 + 119) / 239)
-exe '6resize ' . ((&lines * 12 + 34) / 68)
-exe 'vert 6resize ' . ((&columns * 77 + 119) / 239)
+2wincmd w
+exe '1resize ' . ((&lines * 52 + 34) / 68)
+exe 'vert 1resize ' . ((&columns * 119 + 119) / 239)
+exe '2resize ' . ((&lines * 52 + 34) / 68)
+exe 'vert 2resize ' . ((&columns * 119 + 119) / 239)
+exe '3resize ' . ((&lines * 12 + 34) / 68)
 tabedit todo.txt
 set splitbelow splitright
 wincmd _ | wincmd |
@@ -857,7 +857,6 @@ set winheight=1 winwidth=1
 exe 'vert 1resize ' . ((&columns * 118 + 119) / 239)
 exe 'vert 2resize ' . ((&columns * 120 + 119) / 239)
 argglobal
-1argu
 edit todo.txt
 setlocal keymap=
 setlocal noarabic
@@ -968,7 +967,6 @@ normal! zt
 normal! 0
 wincmd w
 argglobal
-1argu
 edit ~/pyy/iprog/tamapro
 let s:cpo_save=&cpo
 set cpo&vim
@@ -1100,6 +1098,7 @@ normal! zt
 normal! 0
 lcd ~/pyy/iprog/tamapro
 wincmd w
+2wincmd w
 exe 'vert 1resize ' . ((&columns * 118 + 119) / 239)
 exe 'vert 2resize ' . ((&columns * 120 + 119) / 239)
 tabnext 1
