@@ -58,10 +58,10 @@ nnoremap ü ik$
 nnoremap ä /
 nnoremap ö /
 imap kl 
-iabbr false: False:
-iabbr true: True:
-iabbr pritn print
 iabbr adn and
+iabbr pritn print
+iabbr true: True:
+iabbr false: False:
 let &cpo=s:cpo_save
 unlet s:cpo_save
 set backspace=indent,eol,start
@@ -98,7 +98,7 @@ badd +4 constants.py
 badd +1 startserver.py
 badd +1 todo.txt
 badd +1 init_queries.sql
-badd +20 initdatabase.py
+badd +1 initdatabase.py
 badd +20 shop.py
 args server.py tamasimulation.py item.py
 edit server.py
@@ -219,12 +219,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 370 - ((0 * winheight(0) + 32) / 65)
+let s:l = 317 - ((36 * winheight(0) + 32) / 65)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-370
-normal! 035l
+317
+normal! 033l
 wincmd w
 argglobal
 2argu
@@ -329,11 +329,11 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 275 - ((31 * winheight(0) + 32) / 65)
+let s:l = 203 - ((32 * winheight(0) + 32) / 65)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-275
+203
 normal! 08l
 wincmd w
 argglobal
@@ -447,7 +447,6 @@ normal! zt
 1
 normal! 0
 wincmd w
-2wincmd w
 exe 'vert 1resize ' . ((&columns * 80 + 119) / 239)
 exe 'vert 2resize ' . ((&columns * 80 + 119) / 239)
 exe 'vert 3resize ' . ((&columns * 77 + 119) / 239)
@@ -838,7 +837,6 @@ normal! zt
 1
 normal! 0
 wincmd w
-2wincmd w
 exe '1resize ' . ((&lines * 52 + 34) / 68)
 exe 'vert 1resize ' . ((&columns * 119 + 119) / 239)
 exe '2resize ' . ((&lines * 52 + 34) / 68)
@@ -959,51 +957,30 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 1 - ((0 * winheight(0) + 32) / 65)
+let s:l = 5 - ((4 * winheight(0) + 32) / 65)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
+5
 normal! 0
 wincmd w
 argglobal
-edit ~/pyy/iprog/tamapro
-let s:cpo_save=&cpo
-set cpo&vim
-imap <buffer> <S-LeftMouse> <Plug>ISLeftmouse
-imap <buffer> <MiddleMouse> <Plug>IMiddlemouse
-imap <buffer> <LeftMouse> <Plug>ILeftmouse
-nmap <buffer>  <Plug>NetrwHideEdit
-nmap <buffer>  <Plug>NetrwRefresh
-nnoremap <buffer> <silent> C :let g:netrw_chgwin= winnr()
-nnoremap <buffer> <silent> c :exe "keepjumps lcd ".fnameescape(b:netrw_curdir)
-nnoremap <buffer> <F1> :he netrw-quickhelp
-nmap <buffer> <silent> <Plug>Netrw2Leftmouse -
-nmap <buffer> <2-LeftMouse> <Plug>Netrw2Leftmouse
-nmap <buffer> <S-LeftMouse> <Plug>NetrwSLeftmouse
-nmap <buffer> <MiddleMouse> <Plug>NetrwMiddlemouse
-nmap <buffer> <LeftMouse> <Plug>NetrwLeftmouse
-imap <buffer>  <Plug>NetrwHideEdit
-imap <buffer>  <Plug>NetrwRefresh
-inoremap <buffer> <silent> C :let g:netrw_chgwin= winnr()
-inoremap <buffer> <silent> c :exe "keepjumps lcd ".fnameescape(b:netrw_curdir)
-let &cpo=s:cpo_save
-unlet s:cpo_save
+edit initdatabase.py
 setlocal keymap=
 setlocal noarabic
-setlocal noautoindent
-setlocal balloonexpr=netrw#NetrwBalloonHelp()
+setlocal autoindent
+setlocal balloonexpr=
 setlocal nobinary
 setlocal bufhidden=
-setlocal nobuflisted
+setlocal buflisted
 setlocal buftype=
 setlocal nocindent
-setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
+setlocal cinkeys=0{,0},0),:,!^F,o,O,e
 setlocal cinoptions=
 setlocal cinwords=if,else,while,do,for,switch
 setlocal colorcolumn=
-setlocal comments=s1:/*,mb:*,ex:*/,://,b:#,:%,:XCOMM,n:>,fb:-
-setlocal commentstring=/*%s*/
+setlocal comments=s1:/*,mb:*,ex:*/,://,b:#,:XCOMM,n:>,fb:-
+setlocal commentstring=#%s
 setlocal complete=.,w,b,u,t,i
 setlocal concealcursor=
 setlocal conceallevel=0
@@ -1012,15 +989,15 @@ setlocal nocopyindent
 setlocal cryptmethod=
 setlocal nocursorbind
 setlocal nocursorcolumn
-setlocal cursorline
+setlocal nocursorline
 setlocal define=
 setlocal dictionary=
 setlocal nodiff
 setlocal equalprg=
 setlocal errorformat=
 setlocal expandtab
-if &filetype != 'netrw'
-setlocal filetype=netrw
+if &filetype != 'python'
+setlocal filetype=python
 endif
 setlocal foldcolumn=0
 setlocal foldenable
@@ -1038,29 +1015,29 @@ setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
 setlocal grepprg=
 setlocal iminsert=2
 setlocal imsearch=2
-setlocal include=
-setlocal includeexpr=
-setlocal indentexpr=
-setlocal indentkeys=0{,0},:,0#,!^F,o,O,e
+setlocal include=^\\s*\\(from\\|import\\)
+setlocal includeexpr=substitute(v:fname,'\\.','/','g')
+setlocal indentexpr=GetPythonIndent(v:lnum)
+setlocal indentkeys=0{,0},:,!^F,o,O,e,<:>,=elif,=except
 setlocal noinfercase
 setlocal iskeyword=@,48-57,_,192-255
-setlocal keywordprg=
+setlocal keywordprg=pydoc
 setlocal nolinebreak
 setlocal nolisp
 setlocal nolist
 setlocal makeprg=
 setlocal matchpairs=(:),{:},[:]
 setlocal nomodeline
-setlocal nomodifiable
+setlocal modifiable
 setlocal nrformats=octal,hex
 setlocal nonumber
 setlocal numberwidth=4
-setlocal omnifunc=
+setlocal omnifunc=pythoncomplete#Complete
 setlocal path=
 setlocal nopreserveindent
 setlocal nopreviewwindow
 setlocal quoteescape=\\
-setlocal readonly
+setlocal noreadonly
 setlocal norelativenumber
 setlocal norightleft
 setlocal rightleftcmd=search
@@ -1074,11 +1051,11 @@ setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
 setlocal spellfile=
 setlocal spelllang=en
 setlocal statusline=
-setlocal suffixesadd=
+setlocal suffixesadd=.py
 setlocal swapfile
 setlocal synmaxcol=3000
-if &syntax != 'netrw'
-setlocal syntax=netrw
+if &syntax != 'python'
+setlocal syntax=python
 endif
 setlocal tabstop=8
 setlocal tags=
@@ -1087,18 +1064,17 @@ setlocal thesaurus=
 setlocal noundofile
 setlocal nowinfixheight
 setlocal nowinfixwidth
-setlocal nowrap
+setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 18 - ((16 * winheight(0) + 32) / 65)
+let s:l = 20 - ((19 * winheight(0) + 32) / 65)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-18
-normal! 0
+20
+normal! 08l
 lcd ~/pyy/iprog/tamapro
 wincmd w
-2wincmd w
 exe 'vert 1resize ' . ((&columns * 118 + 119) / 239)
 exe 'vert 2resize ' . ((&columns * 120 + 119) / 239)
 tabnext 1
