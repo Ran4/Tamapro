@@ -122,6 +122,8 @@ class Server:
         r = self.app.route
         #r('/', method="GET", callback=self.index)
         r('/', callback=self.index)
+        r('/json', callback=self.index)
+        r('/json/', callback=self.index)
         r('/addtama/<uid>/<password>', callback=self.createNewTama)
         r('/addtama/<uid>/<password>/', callback=self.createNewTama)
         r('/json/showiteminfo/<itemStr>', callback=self.showItemInfoJSON)
@@ -156,7 +158,7 @@ class Server:
 
         sb = []
         for sim in self.simulations.values():
-            url = "{0.password}/{0.uid}/".format(sim)
+            url = "{0.uid}/{0.password}/status".format(sim)
             sb.append("<a href='{0}'>{1.uid}</a></br>".format(
                 url, sim))
         s += "<b>Simulations running:</b></br>"
@@ -391,17 +393,17 @@ class Server:
             return json.dumps({"error": True,
                 "message": "Item %s doesn't exist!" % itemStr})
         else:
-            return json.dumps("error":False, 
-                    "description:", item.items[itemStr]["description"]))
+            return json.dumps({"error": False, 
+                    "description": itef.items[itemStr]["description"]})
     
     def shopShowItemInfoJSON(self, itemStr):
         if itemStr not in self.shop.itemAndCostDict:
             return json.dumps({"error": True,
                 "message": "Item %s not in shop!" % itemStr})
         else:
-            return json.dumps("error":False, 
+            return json.dumps({"error": False, 
                     "description": item.items[itemStr]["description"],
-                    "price": self.shop.getPriceOfItem(itemStr)))
+                    "price": self.shop.getPriceOfItem(itemStr)})
 
         response = {"error": False}
         response.update(item.items[itemStr])

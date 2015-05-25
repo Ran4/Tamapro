@@ -121,7 +121,7 @@ class TamaSimulation(object):
             s = "%s doesn't have a %s" % (self.uid, itemStr)
 
             return json.dumps(
-                {"error": False, "message": s})
+                {"error": True, "message": s})
 
         if not item.isEdible(itemStr):
             s = "%s can't eat a %s" % (self.uid, itemStr)
@@ -142,44 +142,38 @@ class TamaSimulation(object):
         self.inventory.remove(itemStr)
         return json.dumps({"error": False, "message": s})
 
-    def pet(self, itemStr=None):
-        if item.isPettable(itemStr):
-            self.mood += con.MOOD_INCREASE_IF_LIKE
-        else:
-            self.mood += con.MOOD_INCREASE_IF_DISLIKE
-
-        if not itemStr:
-            return "%s was petted! New mood: %s" % (self.uid, self.mood)
-
-        s = "%s was petted with a %s!" % (self.uid, itemStr)
-
-        if item.hasProperty(itemStr, item.POISONOUS):
-            if not self.sick: #only tell if we're not already sick
-                s += " It sickened %s!" % self.uid
-            self.sick = True
-
-        jsonObj = {"error": False, "message": s}
-
-        return jsonObj
-
     def petJSON(self, itemStr=None):
-        if item.isPettable(itemStr):
-            self.mood += con.MOOD_INCREASE_IF_LIKE
+        if itemStr is None:
+            self.changeMood(con.MOOD_INCREASE_IF_LIKE)
         else:
-            self.mood += con.MOOD_INCREASE_IF_DISLIKE
-
-        if not itemStr:
+            if item.isPettable(itemStr):
+                self.changeMood(con.MOOD_INCREASE_IF_LOVE)
+            else:
+                self.changeMood(con.MOOD_INCREASE_IF_DISLIKE)
+        
+        if itemStr is None: #Was petted without an item
             s = "%s was petted!" % (self.uid)
-            return json.dumps({"error": False, "message": s})
+            return json.dumps({"error": False, "message": s,
+                "newmood": self.mood})
+        elif itemStr not in self.inventory: #Don't have that item!
+            s = "%s doesn't have a %s" % (self.uid, itemStr)
+
+            return json.dumps({"error": True, "message": s})
 
         s = "%s was petted with a %s!" % (self.uid, itemStr)
+        if item.isPettable(itemStr): 
+            s += "\nIt liked it" 
+        else:
+            s += "\nIt didn't like it" 
+        s += "\nNew mood: %s" % self.mood
 
         if item.hasProperty(itemStr, item.POISONOUS):
             if not self.sick: #only tell if we're not already sick
                 s += " It sickened %s!" % self.uid
             self.sick = True
 
-        return json.dumps({"error": False, "message": s})
+        return json.dumps({"error": False, "message": s,
+            "newmood": self.mood})
 
     def playWithItemJSON(self, itemStr):
         if not itemStr:
