@@ -85,9 +85,10 @@ class Server:
             print "  %s item entries from %s tamas inserted into database" % \
                     (numItems, len(self.simulations))
 
-        #TODO: save shops
-        c.executemany("INSERT INTO showitems VALUES (?, ?)",
-                self.shop.itemAndCostDict.items()
+        if verbose: print "saving shop items!"
+        c.executemany("INSERT INTO shopitems VALUES (?, ?)",
+                self.shop.itemAndCostDict.items())
+        if verbose: print "Saved shop items"
         
         conn.commit()
 
@@ -136,9 +137,7 @@ class Server:
         if verbose: print "knows SELECT answer:", knowsList
         for knows in knowsList:
             print "knows:", knows
-            #uid, name, amount = knows
-
-        #TODO: Load all the shop data
+            self.simulations[knows[0]].knows[knows[1]] = knows[2]
 
     def start(self):
         self.app.run(host=self.host, port=self.port)
