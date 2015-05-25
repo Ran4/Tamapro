@@ -30,8 +30,8 @@ class Server:
         sim = TamaSimulation(uid, pw)
         self.simulations[uid] = sim
 
-        sim.inventory.append("child")
-        sim.inventory.append("banana")
+        sim.inventory.append("Child")
+        sim.inventory.append("Banana")
 
         print "DEBUG: new sim was added, now saving to db"
         self.saveToDatabase(verbose=True)

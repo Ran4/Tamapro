@@ -10,15 +10,15 @@ EXPENSIVE = 128
 
 #each value in the items dictionary corresponds to a property of the item
 items = {
-    "banana": {"properties": EDIBLE | PETTABLE, "description": "A yellow banana.", "price": 1},
-    "orange": {"properties": EDIBLE, "description": "A juicy orange.", "price": 2},
-    "child": {"properties": EDIBLE | TASTY, "description": "A tasty child.", "price": 10},
-    "tire": {"properties": PLAYABLE, "description": "A fun round tire.", "price": 15},
-    "rotten apple": {"properties": EDIBLE | POISONOUS, "description": "A rotten apple. Yuck!", "price": 5},
-    "rusty nail": {"properties": PLAYABLE | POISONOUS, "description": "A pointy nail covered with rust.", "price": 20},
-    "medicine": {"properties": EDIBLE | HEALING, "description": "A small white pill.", "price": 25},
-    "golden apple": {"properties": EDIBLE | HEALING, "description": "A golden apple. It looks valuable.", "price": 50},
-    "book": {"properties": PLAYABLE, "description": "An old dusty book.", "price": 25},
+    "Banana": {"properties": EDIBLE | PETTABLE, "description": "A yellow banana.", "price": 1},
+    "Orange": {"properties": EDIBLE, "description": "A juicy orange.", "price": 2},
+    "Child": {"properties": EDIBLE | TASTY, "description": "A tasty child.", "price": 10},
+    "Tire": {"properties": PLAYABLE, "description": "A fun round tire.", "price": 15},
+    "Rotten apple": {"properties": EDIBLE | POISONOUS, "description": "A rotten apple. Yuck!", "price": 5},
+    "Rusty nail": {"properties": PLAYABLE | POISONOUS, "description": "A pointy nail covered with rust.", "price": 20},
+    "Medicine": {"properties": EDIBLE | HEALING, "description": "A small white pill.", "price": 25},
+    "Golden apple": {"properties": EDIBLE | HEALING, "description": "A golden apple. It looks valuable.", "price": 50},
+    "Book": {"properties": PLAYABLE, "description": "An old dusty book.", "price": 25},
 }
 
 def hasProperty(itemName, prop):
