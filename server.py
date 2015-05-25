@@ -127,6 +127,7 @@ class Server:
         r('/addtama/<uid>/<password>', callback=self.createNewTama)
         r('/addtama/<uid>/<password>/', callback=self.createNewTama)
         r('/json/showiteminfo/<itemStr>', callback=self.showItemInfoJSON)
+        r('/json/shopshowiteminfo/<itemStr>', callback=self.shopShowItemInfoJSON)
         r('/json/listallitems', callback=self.listAllItems)
         r('/json/addtama/<uid>/<password>', callback=self.createNewTamaJSON)
         r('/json/addtama/<uid>/<password>/', callback=self.createNewTamaJSON)
@@ -382,7 +383,7 @@ class Server:
 
         elif command == "getmoney":
             return json.dumps({"error": False, "money": sim.money})
-        
+
         elif command == "buyitem":
             return sim.buyItem(self.shop)
 
