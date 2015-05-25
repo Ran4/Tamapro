@@ -310,7 +310,7 @@ class Server:
         elif command == "commands":
             return self.showCommands()
         
-        elif command = "addfriend":
+        elif command == "addfriend":
             if arg not in self.simulations:
                 return json.dumps({"error":True,
                     "message": "No tama named %s exists!" % arg})
