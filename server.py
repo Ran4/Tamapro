@@ -296,7 +296,7 @@ class Server:
             return json.dumps({"error": False, "money": sim.money})
 
         elif command == "buyitem":
-            return sim.buyItem(arg, self.shop)
+            return sim.buyItem(self.shop, arg)
         
         elif command == "commands":
             return self.showCommands()
