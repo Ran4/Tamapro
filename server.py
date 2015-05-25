@@ -247,6 +247,9 @@ class Server:
 
     def handleCommandJSON(self, sim, command, arg):
         s = ""
+        
+        print "in handleCommandJSON, got command %s and arg %s" % \
+                (command, arg)
 
         #Handle the commands!
         if command == "give":
