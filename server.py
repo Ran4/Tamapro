@@ -127,7 +127,7 @@ class Server:
         r('/addtama/<uid>/<password>', callback=self.createNewTama)
         r('/addtama/<uid>/<password>/', callback=self.createNewTama)
         r('/json/showiteminfo/<itemStr>', callback=self.showItemInfoJSON)
-        r('/json/listallitems', callback=self.listAllItems)
+        r('/json/listallitemsinshop', callback=self.listAllItemsInShop)
         r('/json/addtama/<uid>/<password>', callback=self.createNewTamaJSON)
         r('/json/addtama/<uid>/<password>/', callback=self.createNewTamaJSON)
         r('/json/<uid>/<password>', callback=self.login)
@@ -411,7 +411,7 @@ class Server:
         response.update(item.items[itemStr])
         return json.dumps(response)
 
-    def listAllItems(self):
+    def listAllItemsInShop(self):
         return self.shop.getItemsNamesJSON()
 
     def showCommands(self, uid, password):
