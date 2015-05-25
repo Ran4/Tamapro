@@ -23,25 +23,34 @@ class Server:
 
         self.simulations = {}
         self.shop = shop.Shop()
-
-        self.loadFromDatabase(verbose=False)
-
-        #Debug stuff
-        uid = "debuguid"
-        pw = "debugpw"
-        sim = TamaSimulation(uid, pw)
-        self.simulations[uid] = sim
-
-        sim.inventory.append("child")
-        sim.inventory.append("banana")
-
-        print "DEBUG: new sim was added, now saving to db"
-        self.saveToDatabase(verbose=True)
-        print "DEBUG: will now load from database"
+        
+        self.createNewTamaJSON("debuguid", "debugpw")
+        self.simulations["debuguid"].addItemJSON("tire")
+        self.simulations["debuguid"].addItemJSON("child")
+        self.simulations["debuguid"].addItemJSON("banana")
+        self.createNewTamaJSON("debuguid2", "debugpw2")
+        
+        self.saveToDatabase(verbose=2)
+        
         self.loadFromDatabase(verbose=True)
+        
+    def getDatabaseReadyForUpdate(self, verbose=True):
+        conn = sqlite3.connect(self.dbname)
+        c = conn.cursor()
+        
+        c.execute("DELETE FROM tamas")
+        c.execute("DELETE FROM has")
+        c.execute("DELETE FROM knows")
+        c.execute("DELETE FROM shopitems")
+
+        print "Database ready for updating!"
+        conn.commit()
 
     def saveToDatabase(self, verbose=True):
         """Saves all simulations and shops to the database"""
+        
+        self.getDatabaseReadyForUpdate()
+        
         conn = sqlite3.connect(self.dbname)
         c = conn.cursor()
         if verbose:
@@ -59,8 +68,8 @@ class Server:
         numItems = 0
         for sim in self.simulations.values():
             if verbose == 2: #extra verbose!
-                print "    Tries inserting inventory for tama %s (uid=%s)..." %\
-                        (sim.uid)
+                print "    Tries inserting inventory = %s for tama %s..." %\
+                        (str(sim.inventory), sim.uid)
 
             itemDBValues = sim.getInventoryDBValues()
             c.executemany("INSERT INTO has VALUES (?,?,?)", itemDBValues)
@@ -71,39 +80,53 @@ class Server:
                     (numItems, len(self.simulations))
 
         #TODO: save shops
+        
+        conn.commit()
 
         if verbose:
             print "Successfully saved everything to db!\n"
 
     def loadFromDatabase(self, verbose=True):
         """Loads all simulations and shops from the database"""
+        #Connect to database
         conn = sqlite3.connect(self.dbname)
         c = conn.cursor()
 
         if verbose:
-            print "Connected to database '%s' and established cursor" % \
+            print "loadFromDatabase: Connected to database '%s' and established cursor" % \
                     self.dbname
 
+        #First, populate list of simulations
         c.execute("SELECT * FROM tamas")
         propList  = c.fetchall()
+        self.simulations = {}
+        if verbose: print "SELECT answer:", propList
+            
+        for prop in propList:
+            uid = prop[0]
+            pw = prop[2]
+            self.simulations[uid] = TamaSimulation(uid, pw)
+            self.simulations[uid].readDBValues(prop)
+            
         if verbose:
-            print "SELECT answer:", propList
-
-
-        #First, populate list of simulations
-        """
-        for **kwargs in c.execute("SELECT * FROM tamas"):
-            print "kwargs from tamas:", kwargs
-            #self.simulations[uid] = TamaSimulation(**kwargs)
-            #sim = TamaSimulation(uid, pw)
-        """
+            print "self.simulations: %s" % str(self.simulations)
+            
         #Load up all items to all tamas
-        """
-        for uid, itemName, amount in c.execute("SELECT uid, name, amount FROM has"):
+        c.execute("SELECT * FROM has")
+        hasList = c.fetchall()
+        if verbose: print "SELECT answer:", hasList
+        for has in hasList:
+            uid, name, amount = has
             for _ in range(amount):
-                self.simulations[uid].inventory.add(itemName)
-        """
+                self.simulations[uid].inventory.append(name)
 
+        #Load up all relationships
+        c.execute("SELECT * FROM knows")
+        knowsList = c.fetchall()
+        if verbose: print "SELECT answer:", knowsList
+        for knows in knowsList:
+            print "knows:", know
+            #uid, name, amount = knows
 
         #TODO: Load all the shop data
 
@@ -124,8 +147,6 @@ class Server:
         r('/', callback=self.index)
         r('/json', callback=self.index)
         r('/json/', callback=self.index)
-        r('/addtama/<uid>/<password>', callback=self.createNewTama)
-        r('/addtama/<uid>/<password>/', callback=self.createNewTama)
         r('/json/showiteminfo/<itemStr>', callback=self.showItemInfoJSON)
         r('/json/shopshowiteminfo/<itemStr>', callback=self.shopShowItemInfoJSON)
         r('/json/listallitemsinshop', callback=self.listAllItemsInShop)
@@ -168,29 +189,17 @@ class Server:
 
         return s
 
-    def createNewTama(self, uid, password):
-        sim = self.getSimFromUID(uid)
-        if not sim:
-            self.simulations[uid] = TamaSimulation(uid, password)
-            return "New tama with id </br>{}</br> was created!".format(uid)
-
-        else:
-            return "Tama with id </br>{}</br> already exists!".format(uid)
-
-        return
-
     def createNewTamaJSON(self, uid, password):
         sim = self.getSimFromUID(uid)
         if not sim:
             self.simulations[uid] = TamaSimulation(uid, password)
             jsonObj = {"error": False, "message": "Tama created."}
+            self.saveToDatabase(verbose=False)
             return json.dumps(jsonObj, indent=4, separators=(",", ": "))
-
         else:
             jsonObj = {"error": True, "message": "Tama with name {} already exists.".format(uid)}
             return json.dumps(jsonObj, indent=4, separators=(",", ": "))
-
-        return
+        
 
     def login(self, uid, password):
         sim = self.getSimFromUID(uid)
@@ -300,6 +309,12 @@ class Server:
         
         elif command == "commands":
             return self.showCommands()
+        
+        elif command = "addfriend":
+            if arg not in self.simulations:
+                return json.dumps({"error":True,
+                    "message": "No tama named %s exists!" % arg})
+            return sim.addFriend(arg)
 
         #Command wasn't handled if we are here
         s += "Command %s wasn't handled." % command
@@ -351,7 +366,8 @@ class Server:
         for sim in self.simulations.values():
             sim.updateSimulation(dt)
 
-        self.saveToDatabase(verbose=True)
+        print "TODO: MAKE SUER TO SAVETODATABASE"
+        #self.saveToDatabase(verbose=True)
         return "Successfully ran updateSimulation"
 
     #Simulation stuff

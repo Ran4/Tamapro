@@ -1,8 +1,9 @@
 commandList = ["eat", "pet", "playwithitem", "playwithtama", "give",
     "inventory", "getimage", "status", "getshopitems", "getmoney", "buyitem",
+    "addfriend",
     "statushtml", "commands"]
 requiresArguments = ["eat", "give",
-    "playwithitem", "playwithtama", "buyitem"]
+    "playwithitem", "playwithtama", "buyitem", "addfriend"]
 
 START_KNOWLEDGE_LEVEL = 50
 MAX_KNOWLEDGE_LEVEL = 100
