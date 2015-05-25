@@ -86,6 +86,8 @@ class Server:
                     (numItems, len(self.simulations))
 
         #TODO: save shops
+        c.executemany("INSERT INTO showitems VALUES (?, ?)",
+                self.shop.itemAndCostDict.items()
         
         conn.commit()
 
@@ -157,7 +159,8 @@ class Server:
         r('/json', callback=self.index)
         r('/json/', callback=self.index)
         r('/json/showiteminfo/<itemStr>', callback=self.showItemInfoJSON)
-        r('/json/shopshowiteminfo/<itemStr>', callback=self.shopShowItemInfoJSON)
+        r('/json/shopshowiteminfo/<itemStr>', 
+                callback=self.shopShowItemInfoJSON)
         r('/json/listallitemsinshop', callback=self.listAllItemsInShop)
         r('/json/addtama/<uid>/<password>', callback=self.createNewTamaJSON)
         r('/json/addtama/<uid>/<password>/', callback=self.createNewTamaJSON)

@@ -58,10 +58,10 @@ nnoremap ü ik$
 nnoremap ä /
 nnoremap ö /
 imap kl 
-iabbr adn and
-iabbr pritn print
-iabbr true: True:
 iabbr false: False:
+iabbr true: True:
+iabbr pritn print
+iabbr adn and
 let &cpo=s:cpo_save
 unlet s:cpo_save
 set backspace=indent,eol,start
@@ -219,12 +219,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 134 - ((31 * winheight(0) + 32) / 65)
+let s:l = 170 - ((36 * winheight(0) + 32) / 65)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-134
-normal! 012l
+170
+normal! 015l
 wincmd w
 argglobal
 2argu
@@ -329,7 +329,7 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 203 - ((32 * winheight(0) + 32) / 65)
+let s:l = 203 - ((0 * winheight(0) + 32) / 65)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
@@ -573,12 +573,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 4 - ((3 * winheight(0) + 26) / 52)
+let s:l = 17 - ((16 * winheight(0) + 26) / 52)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-4
-normal! 0
+17
+normal! 04l
 wincmd w
 argglobal
 1argu
@@ -957,12 +957,12 @@ setlocal nowinfixwidth
 setlocal wrap
 setlocal wrapmargin=0
 silent! normal! zE
-let s:l = 37 - ((36 * winheight(0) + 32) / 65)
+let s:l = 26 - ((25 * winheight(0) + 32) / 65)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-37
-normal! 013l
+26
+normal! 0
 wincmd w
 argglobal
 edit initdatabase.py
