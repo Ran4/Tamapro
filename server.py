@@ -112,7 +112,7 @@ class Server:
             uid = prop[0]
             pw = prop[2]
             prop = list(prop)
-            prop[5] = bool(prop[5])
+            prop[5] = bool(prop[5]) #sick should be a bool!
             self.simulations[uid] = TamaSimulation(uid, pw)
             self.simulations[uid].readDBValues(prop)
             
